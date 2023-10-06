@@ -1,32 +1,35 @@
 import React from 'react';
-import {
-  Typography
-} from '@mui/material';
-import './userPhotos.css';
+import { Typography } from '@mui/material';
+import './UserPhotos.css';
 
-
-/**
- * Define UserPhotos, a React componment of project #5
- */
 class UserPhotos extends React.Component {
   constructor(props) {
     super(props);
-
+    this.state = {
+      photos: window.models.photoOfUserModel(this.props.match.params.userId),
+    };
   }
 
   render() {
-    return (
-      <Typography variant="body1">
-      This should be the UserPhotos view of the PhotoShare app. Since
-      it is invoked from React Router the params from the route will be
-      in property match. So this should show details of user:
-      {this.props.match.params.userId}. You can fetch the model for the user from
-      window.models.photoOfUserModel(userId):
-        <Typography variant="caption">
-          {JSON.stringify(window.models.photoOfUserModel(this.props.match.params.userId))}
-        </Typography>
-      </Typography>
+    const { photos } = this.state;
 
+    return (
+        <div>
+          <Typography variant="body1">
+            This should be the UserPhotos view of the PhotoShare app.
+          </Typography>
+          <Typography variant="body1">
+            User ID: {this.props.match.params.userId}
+          </Typography>
+          <Typography variant="body1">
+            User Photos:
+          </Typography>
+          <div>
+            {photos.map((photo, index) => (
+                <img key={index} src={photo.url} alt={`User ${this.props.match.params.userId} Photo`} />
+            ))}
+          </div>
+        </div>
     );
   }
 }

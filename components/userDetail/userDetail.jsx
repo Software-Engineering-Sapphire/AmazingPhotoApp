@@ -1,29 +1,33 @@
 import React from 'react';
-import {
-  Typography
-} from '@mui/material';
-import './userDetail.css';
+import { Typography } from '@mui/material';
+import './UserDetail.css';
 
-
-/**
- * Define UserDetail, a React component of project #5
- */
 class UserDetail extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            user: window.models.userModel(this.props.match.params.userId),
+        };
+    }
 
-  render() {
-    return (
-      <Typography variant="body1">
-        This should be the UserDetail view of the PhotoShare app. Since
-        it is invoked from React Router the params from the route will be
-        in property match. So this should show details of user:
-        {this.props.match.params.userId}. You can fetch the model for the
-        user from window.models.userModel(userId).
-      </Typography>
-    );
-  }
+    render() {
+        const { user } = this.state;
+
+        return (
+            <div>
+                <Typography variant="body1">
+                    This should be the UserDetail view of the PhotoShare app.
+                </Typography>
+                <Typography variant="body1">
+                    User ID: {user.id}
+                </Typography>
+                <Typography variant="body1">
+                    User Name: {user.name}
+                </Typography>
+                {/* Add more user details as needed */}
+            </div>
+        );
+    }
 }
 
 export default UserDetail;
