@@ -19,7 +19,7 @@ class UserPhotos extends React.Component {
             <div key="wow">
                 <Link to={`/users/${this.props.match.params.userId}`}>
                     <ListItemButton>
-                        <ListItemText primary="hiya" />
+                        <ListItemText primary="Photo Information" />
                     </ListItemButton>
                 </Link>
                 <Divider />
@@ -35,8 +35,9 @@ class UserPhotos extends React.Component {
           </Typography>
           <div>
             {photos.map((photo, index) => (
-                <img key={index} src={photo.url} alt={`User ${this.props.match.params.userId} Photo`} />
+                <img key={index} src={"../../images/"+photo.file_name} alt={`User ${this.props.match.params.userId} Photo`} />
             ))}
+
           </div>
         </div>
     );
