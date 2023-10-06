@@ -48,6 +48,7 @@ class PhotoShare extends React.Component {
                 </Typography>
                 )}
               />
+              {/* :userId is a placeholder for a user ID. userId is passed as props to the UserDetail component. */}
               <Route path="/users/:userId"
                 render={ props => <UserDetail {...props} /> }
               />
