@@ -10,6 +10,9 @@ John Krueger - ItalianJack
 
 ### Development Team
 Ken Gerrish - KGerrishUNCC
+
 Smit Sakariya - Sakarmit
+
 Aaryan Kumar - AaryanUNCC
+
 Blake Muscoreil - blakeuncc
