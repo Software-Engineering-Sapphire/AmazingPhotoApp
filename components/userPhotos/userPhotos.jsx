@@ -1,6 +1,7 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import {Divider, ListItemButton, ListItemText, Typography} from '@mui/material';
 import './UserPhotos.css';
+import {Link} from "react-router-dom";
 
 class UserPhotos extends React.Component {
   constructor(props) {
@@ -12,9 +13,17 @@ class UserPhotos extends React.Component {
 
   render() {
     const { photos } = this.state;
-
+   console.log(this.props.match.params.userId);
     return (
         <div>
+            <div key="wow">
+                <Link to={`/users/${this.props.match.params.userId}`}>
+                    <ListItemButton>
+                        <ListItemText primary="hiya" />
+                    </ListItemButton>
+                </Link>
+                <Divider />
+            </div>
           <Typography variant="body1">
             This should be the UserPhotos view of the PhotoShare app.
           </Typography>

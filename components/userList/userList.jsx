@@ -22,7 +22,7 @@ class UserList extends React.Component {
           <List component="nav">
             {this.state.users.map((user, index) => (
                 <div key={index}>
-                  <Link to={`/user/${user._id}`}>
+                  <Link to={`/users/${user._id}`}>
                     <ListItemButton>
                       <ListItemText primary={user.first_name + ' ' + user.last_name} />
                     </ListItemButton>
