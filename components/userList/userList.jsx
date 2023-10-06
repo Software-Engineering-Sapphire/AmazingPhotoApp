@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Divider, List, ListItem, ListItemText, Typography } from '@mui/material';
+import {Divider, List, ListItem, ListItemButton, ListItemText, Typography} from '@mui/material';
 import './UserList.css';
 
 class UserList extends React.Component {
@@ -22,10 +22,10 @@ class UserList extends React.Component {
           <List component="nav">
             {this.state.users.map((user, index) => (
                 <div key={index}>
-                  <Link to={`/user/${user.id}`}>
-                    <ListItem button>
-                      <ListItemText primary={user.name} />
-                    </ListItem>
+                  <Link to={`/user/${user._id}`}>
+                    <ListItemButton>
+                      <ListItemText primary={user.first_name + ' ' + user.last_name} />
+                    </ListItemButton>
                   </Link>
                   <Divider />
                 </div>
