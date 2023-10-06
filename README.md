@@ -6,12 +6,10 @@
 John Krueger - ItalianJack
 
 ### Project Owner
-??
+Smit Sakariya - Sakarmit
 
 ### Development Team
 Ken Gerrish - KGerrishUNCC
-
-Smit Sakariya - Sakarmit
 
 Aaryan Kumar - AaryanUNCC
 
