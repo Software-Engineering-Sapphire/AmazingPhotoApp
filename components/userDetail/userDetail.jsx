@@ -10,6 +10,7 @@ class UserDetail extends React.Component {
         this.state = {
             user: window.models.userModel(this.props.match.params.userId),
         };
+        this.props.updateMainStatus("Test");
     }
 
     render() {

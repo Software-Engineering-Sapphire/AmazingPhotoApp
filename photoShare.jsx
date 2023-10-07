@@ -17,6 +17,14 @@ import UserPhotos from './components/userPhotos/userPhotos';
 class PhotoShare extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      mainStatus: undefined,
+    }
+    this.handleMainStatusChange = this.handleMainStatusChange.bind(this);
+  }
+
+  handleMainStatusChange = (updatedStatus) => {
+    this.setState({mainStatus: updatedStatus});
   }
 
   render() {
@@ -25,7 +33,7 @@ class PhotoShare extends React.Component {
       <div>
       <Grid container spacing={8}>
         <Grid item xs={12}>
-          <TopBar/>
+          <TopBar mainStatus={this.state.mainStatus}/>
         </Grid>
         <div className="main-topbar-buffer"/>
         <Grid item sm={3}>
@@ -50,7 +58,7 @@ class PhotoShare extends React.Component {
               />
               {/* :userId is a placeholder for a user ID. userId is passed as props to the UserDetail component. */}
               <Route path="/users/:userId"
-                render={ props => <UserDetail {...props} /> }
+                render={ props => <UserDetail {...props} updateMainStatus={this.handleMainStatusChange} /> }
               />
               <Route path="/photos/:userId"
                 render ={ props => <UserPhotos {...props} /> }

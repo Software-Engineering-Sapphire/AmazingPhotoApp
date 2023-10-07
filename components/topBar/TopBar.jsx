@@ -18,6 +18,7 @@ class TopBar extends React.Component {
         <Toolbar>
           <Typography variant="h5" color="inherit">
               This is the TopBar component
+
           </Typography>
         </Toolbar>
       </AppBar>
