@@ -4,44 +4,60 @@ import './UserPhotos.css';
 import {Link} from "react-router-dom";
 
 class UserPhotos extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      photos: window.models.photoOfUserModel(this.props.match.params.userId),
-    };
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            photos: window.models.photoOfUserModel(this.props.match.params.userId),
+        };
+    }
 
-  render() {
-    const { photos } = this.state;
-   console.log(this.props.match.params.userId);
-    return (
-        <div>
-            <div key="wow">
-                <Link to={`/users/${this.props.match.params.userId}`}>
-                    <ListItemButton>
-                        <ListItemText primary="Photo Information" />
-                    </ListItemButton>
-                </Link>
-                <Divider />
+    render() {
+        const {photos} = this.state;
+        console.log(this.props.match.params.userId);
+        return (
+            <div>
+                <div key="wow">
+                    <Link to={`/users/${this.props.match.params.userId}`}>
+                        <ListItemButton>
+                            <ListItemText primary="Photo Information"/>
+                        </ListItemButton>
+                    </Link>
+                    <Divider/>
+                </div>
+                <Typography variant="body1">
+                    This should be the UserPhotos view of the PhotoShare app.
+                </Typography>
+                <Typography variant="body1">
+                    User ID: {this.props.match.params.userId}
+                </Typography>
+                <Typography variant="body1">
+                    User Photos:
+                </Typography>
+                <div>
+                    {photos.map((photo, index) => {
+                        if (photo.comments === undefined) {
+                            photo.comments = [];
+                        }
+                        return <div key={index}>
+                            <p>{photo.date_time}</p>
+                            <img src={"../../images/" + photo.file_name}
+                                 alt={`User ${this.props.match.params.userId} Photo`}/>
+                            {photo.comments.map((comment, index2) =>
+                                <div key={index.toString() + index2.toString()}>
+                                    <p>{comment.date_time}</p>
+                                    <Link to={`/users/${comment.user._id}`}>
+                                        <p>{comment.user.first_name + " " + comment.user.last_name}</p>
+                                    </Link>
+                                    <p>{comment.comment}</p>
+                                </div>
+                            )}
+                        </div>
+                    })}
+
+                </div>
             </div>
-          <Typography variant="body1">
-            This should be the UserPhotos view of the PhotoShare app.
-          </Typography>
-          <Typography variant="body1">
-            User ID: {this.props.match.params.userId}
-          </Typography>
-          <Typography variant="body1">
-            User Photos:
-          </Typography>
-          <div>
-            {photos.map((photo, index) => (
-                <img key={index} src={"../../images/"+photo.file_name} alt={`User ${this.props.match.params.userId} Photo`} />
-            ))}
-
-          </div>
-        </div>
-    );
-  }
+        );
+    }
 }
 
 export default UserPhotos;
