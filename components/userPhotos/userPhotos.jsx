@@ -13,13 +13,12 @@ class UserPhotos extends React.Component {
 
     render() {
         const {photos} = this.state;
-        console.log(this.props.match.params.userId);
         return (
             <div>
-                <div key="wow">
+                <div key="userDetailsBtn">
                     <Link to={`/users/${this.props.match.params.userId}`}>
                         <ListItemButton>
-                            <ListItemText primary="Photo Information"/>
+                            <ListItemText primary="User Details"/>
                         </ListItemButton>
                     </Link>
                     <Divider/>
