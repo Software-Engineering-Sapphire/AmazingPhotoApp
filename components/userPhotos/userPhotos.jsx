@@ -1,5 +1,5 @@
 import React from 'react';
-import {Divider, ListItemButton, ListItemText, Typography} from '@mui/material';
+import {Button, Divider, ListItemButton, ListItemText, Typography} from '@mui/material';
 import './UserPhotos.css';
 import {Link} from "react-router-dom";
 
@@ -13,13 +13,14 @@ class UserPhotos extends React.Component {
 
     render() {
         const {photos} = this.state;
+
         return (
             <div>
                 <div key="userDetailsBtn">
                     <Link to={`/users/${this.props.match.params.userId}`}>
-                        <ListItemButton>
-                            <ListItemText primary="User Details"/>
-                        </ListItemButton>
+                        <Button variant="contained">
+                            User Photos
+                        </Button>
                     </Link>
                     <Divider/>
                 </div>
