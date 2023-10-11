@@ -10,9 +10,6 @@ import './TopBar.css';
 class TopBar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      user: window.models.userModel(this.props.match.params.userId),
-    };
   }
 
   render() {
