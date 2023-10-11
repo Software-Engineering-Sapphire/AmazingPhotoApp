@@ -9,7 +9,7 @@ class UserDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: window.models.userModel(this.props.match.params.userId),
+            user: window.models.userModel(this.props.match.params.userId)
         };
     }
 
@@ -34,7 +34,15 @@ class UserDetail extends React.Component {
                 <Typography variant="body1">
                     User Name: {this.state.user.first_name + ' ' + this.state.user.last_name}
                 </Typography>
-                {/* Add more user details as needed */}
+                <Typography variant="body1">
+                    Location: {this.state.user.location}
+                </Typography>
+                <Typography variant="body1">
+                    Description: {this.state.user.description}
+                </Typography>
+                <Typography variant="body1">
+                    Occupation: {this.state.user.occupation}
+                </Typography>
             </div>
         );
     }
