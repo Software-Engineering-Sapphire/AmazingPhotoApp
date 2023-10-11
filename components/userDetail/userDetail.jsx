@@ -10,12 +10,21 @@ class UserDetail extends React.Component {
         this.state = {
             user: window.models.userModel(this.props.match.params.userId),
         };
-        console.log("UserDetail constructor run");
+        this.updateTopBarStatus();
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.match.params.userId !== prevProps.match.params.userId) {
+            this.state.user = window.models.userModel(this.props.match.params.userId);
+            this.updateTopBarStatus()
+        }
+    }
+
+    updateTopBarStatus() {
+        this.props.updateTopBarStatus(this.state.user.first_name + " " + this.state.user.last_name);
     }
 
     render() {
-        this.state.user = window.models.userModel(this.props.match.params.userId);
-        this.props.handleChangeFunction("Current username: " + this.state.user.name);
         return (
             <div>
                 <Typography variant="body1">

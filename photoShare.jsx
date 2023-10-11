@@ -18,12 +18,12 @@ class PhotoShare extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mainStatus: "constructor value",
+      topBarStatus: "constructor value",
     }
-    this.handleMainStatusChange = this.handleMainStatusChange.bind(this);
+    this.updateTopBarStatus = this.updateTopBarStatus.bind(this);
   }
 
-  handleMainStatusChange = (updatedStatus) => {
+  updateTopBarStatus = (updatedStatus) => {
     this.setState({mainStatus: updatedStatus});
   }
 
@@ -58,10 +58,10 @@ class PhotoShare extends React.Component {
               />
               {/* :userId is a placeholder for a user ID. userId is passed as props to the UserDetail component. */}
               <Route path="/users/:userId"
-                render={ props => <UserDetail {...props} handleChangeFunction={this.handleMainStatusChange} /> }
+                render={ props => <UserDetail {...props} updateTopBarStatus={this.updateTopBarStatus} /> }
               />
               <Route path="/photos/:userId"
-                render ={ props => <UserPhotos {...props} /> }
+                render ={ props => <UserPhotos {...props} updateTopBarStatus={this.updateTopBarStatus}/> }
               />
               <Route path="/users" component={UserList}  />
             </Switch>

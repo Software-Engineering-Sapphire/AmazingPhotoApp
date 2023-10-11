@@ -8,10 +8,23 @@ class UserPhotos extends React.Component {
     super(props);
     this.state = {
       photos: window.models.photoOfUserModel(this.props.match.params.userId),
+        user: window.models.userModel(this.props.match.params.userId)
     };
+    this.updateTopBarStatus();
   }
 
-  render() {
+  componentDidUpdate(prevProps, prevState, snapshot) {
+      if (this.props.match.params.userId !== prevProps.match.params.userId) {
+          this.state.photos = window.models.photoOfUserModel(this.props.match.params.userId);
+          this.updateTopBarStatus();
+      }
+  }
+
+  updateTopBarStatus() {
+      this.props.updateTopBarStatus("Photos for " + this.state.user.first_name + " " + this.state.user.last_name)
+  }
+
+    render() {
     const { photos } = this.state;
    console.log(this.props.match.params.userId);
     return (
