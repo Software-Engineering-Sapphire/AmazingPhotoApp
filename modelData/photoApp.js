@@ -215,6 +215,11 @@
          return (photo.user_id === userId);
       });
    };
+   var userComments = function(userId) {
+      return comments.filter(function (comments) {
+         return (comments.user_id === userId);
+      });
+   };
 
    var schemaModel = function() {
       return schemaInfo;
@@ -224,7 +229,8 @@
       userListModel: userListModel,
       userModel: userModel,
       photoOfUserModel: photoOfUserModel,
-      schemaInfo: schemaModel
+      schemaInfo: schemaModel,
+      userComments: userComments
    };
 
    if( typeof exports !== 'undefined' ) {

@@ -1,8 +1,9 @@
 'use strict'
 
 import React from 'react';
-import {Typography} from '@mui/material';
+import {Button, Divider, ListItemButton, ListItemText, Typography} from '@mui/material';
 import './UserDetail.css';
+import {Link} from "react-router-dom";
 
 class UserDetail extends React.Component {
     constructor(props) {
@@ -27,6 +28,14 @@ class UserDetail extends React.Component {
     render() {
         return (
             <div>
+                <div key="userPhotosBtn">
+                    <Link to={`/photos/${this.props.match.params.userId}`}>
+                        <Button variant="contained">
+                            User Photos
+                        </Button>
+                    </Link>
+                    <Divider/>
+                </div>
                 <Typography variant="body1">
                     This should be the UserDetail view of the PhotoShare app.
                 </Typography>

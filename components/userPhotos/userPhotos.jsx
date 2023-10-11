@@ -1,6 +1,6 @@
 import React from 'react';
-import {Divider, ListItemButton, ListItemText, Typography} from '@mui/material';
-import './UserPhotos.css';
+import {Button, Divider, ListItemButton, ListItemText, Typography} from '@mui/material';
+import './userPhotos.css';
 import {Link} from "react-router-dom";
 
 class UserPhotos extends React.Component {
@@ -27,14 +27,14 @@ class UserPhotos extends React.Component {
 
     render() {
         const {photos} = this.state;
-        console.log(this.props.match.params.userId);
+
         return (
             <div>
-                <div key="wow">
+                <div key="userDetailsBtn">
                     <Link to={`/users/${this.props.match.params.userId}`}>
-                        <ListItemButton>
-                            <ListItemText primary="Photo Information"/>
-                        </ListItemButton>
+                        <Button variant="contained">
+                            User Photos
+                        </Button>
                     </Link>
                     <Divider/>
                 </div>
@@ -48,10 +48,29 @@ class UserPhotos extends React.Component {
                     User Photos:
                 </Typography>
                 <div>
-                    {photos.map((photo, index) => (
-                        <img key={index} src={"../../images/" + photo.file_name}
-                             alt={`User ${this.props.match.params.userId} Photo`}/>
-                    ))}
+                    {photos.map((photo, index) => {
+                        if (photo.comments === undefined) {
+                            photo.comments = [];
+                        }
+                        return <div key={index}>
+                            <div className="wow">
+                            <p>{photo.date_time}</p>
+                            <img src={"../../images/" + photo.file_name}
+                                 alt={`User ${this.props.match.params.userId} Photo`}/>
+                            </div>
+                            {photo.comments.map((comment, index2) =>
+
+                                <div className="wow" key={index.toString() + index2.toString()}>
+                                    <p>{comment.date_time}</p>
+                                    <Link to={`/users/${comment.user._id}`}>
+                                        <p>{comment.user.first_name + " " + comment.user.last_name}</p>
+                                    </Link>
+                                    <p>{comment.comment}</p>
+                                </div>
+                            )}
+                        </div>
+                    })}
+
 
                 </div>
             </div>
