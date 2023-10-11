@@ -8,6 +8,7 @@ class UserPhotos extends React.Component {
         super(props);
         this.state = {
             photos: window.models.photoOfUserModel(this.props.match.params.userId),
+            userId: this.props.match.params.userId,
         };
     }
 
@@ -17,7 +18,7 @@ class UserPhotos extends React.Component {
         return (
             <div>
                 <div key="userDetailsBtn">
-                    <Link to={`/users/${this.props.match.params.userId}`}>
+                    <Link to={`/users/${this.state.userId}`}>
                         <Button variant="contained">
                             User Photos
                         </Button>
@@ -28,7 +29,7 @@ class UserPhotos extends React.Component {
                     This should be the UserPhotos view of the PhotoShare app.
                 </Typography>
                 <Typography variant="body1">
-                    User ID: {this.props.match.params.userId}
+                    User ID: {this.state.userId}
                 </Typography>
                 <Typography variant="body1">
                     User Photos:
@@ -42,7 +43,7 @@ class UserPhotos extends React.Component {
                             <div className="wow">
                             <p>{photo.date_time}</p>
                             <img src={"../../images/" + photo.file_name}
-                                 alt={`User ${this.props.match.params.userId} Photo`}/>
+                                 alt={`User ${this.state.userId} Photo`}/>
                             </div>
                             {photo.comments.map((comment, index2) =>
 
