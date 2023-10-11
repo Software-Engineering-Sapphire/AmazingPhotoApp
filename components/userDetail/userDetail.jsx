@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react';
-import { Typography } from '@mui/material';
+import {Typography} from '@mui/material';
 import './UserDetail.css';
 
 class UserDetail extends React.Component {

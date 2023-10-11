@@ -10,9 +10,6 @@ import './TopBar.css';
 class TopBar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      user: window.models.userModel(this.props.match.params.userId),
-    };
   }
 
   render() {
@@ -20,7 +17,7 @@ class TopBar extends React.Component {
       <AppBar className="topbar-appBar" position="absolute">
         <Toolbar>
           <Typography variant="h5" color="inherit">
-            Name: {this.state.user.first_name + ' ' + this.state.user.last_name}
+            {this.props.topBarStatus}
           </Typography>
         </Toolbar>
       </AppBar>

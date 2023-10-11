@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  HashRouter, Route, Switch
+    HashRouter, Route, Switch
 } from 'react-router-dom';
 import {
-  Grid, Typography, Paper
+    Grid, Typography, Paper
 } from '@mui/material';
 import './styles/main.css';
 
@@ -15,67 +15,73 @@ import UserList from './components/userList/userList';
 import UserPhotos from './components/userPhotos/userPhotos';
 
 class PhotoShare extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      topBarStatus: "constructor value",
+    constructor(props) {
+        super(props);
+        this.state = {
+            topBarStatus: "",
+        }
+        this.updateTopBarStatus = this.updateTopBarStatus.bind(this);
     }
-    this.updateTopBarStatus = this.updateTopBarStatus.bind(this);
-  }
 
-  updateTopBarStatus = (updatedStatus) => {
-    this.setState({mainStatus: updatedStatus});
-  }
+    updateTopBarStatus = (updatedStatus) => {
+        this.setState({topBarStatus: updatedStatus});
+    }
 
-  render() {
-    return (
-      <HashRouter>
-      <div>
-      <Grid container spacing={8}>
-        <Grid item xs={12}>
-          <TopBar mainStatus={this.state.mainStatus}/>
-        </Grid>
-        <div className="main-topbar-buffer"/>
-        <Grid item sm={3}>
-          <Paper className="main-grid-item">
-            <UserList />
-          </Paper>
-        </Grid>
-        <Grid item sm={9}>
-          <Paper className="main-grid-item">
-            <Switch>
-            <Route exact path="/"
-                render={() => (
-                <Typography variant="body1">
-                  Welcome to your photosharing app! This <a href="https://mui.com/components/paper/">Paper</a> component
-                  displays the main content of the application. The {"sm={9}"} prop in
-                  the <a href="https://mui.com/components/grid/">Grid</a> item component makes it responsively
-                  display 9/12 of the window. The Switch component enables us to conditionally render different
-                  components to this part of the screen. You don&apos;t need to display anything here on the homepage,
-                  so you should delete this Route component once you get started.
-                </Typography>
-                )}
-              />
-              {/* :userId is a placeholder for a user ID. userId is passed as props to the UserDetail component. */}
-              <Route path="/users/:userId"
-                render={ props => <UserDetail {...props} updateTopBarStatus={this.updateTopBarStatus} /> }
-              />
-              <Route path="/photos/:userId"
-                render ={ props => <UserPhotos {...props} updateTopBarStatus={this.updateTopBarStatus}/> }
-              />
-              <Route path="/users" component={UserList}  />
-            </Switch>
-          </Paper>
-        </Grid>
-      </Grid>
-      </div>
-      </HashRouter>
-    );
-  }
+    render() {
+        return (
+            <HashRouter>
+                <div>
+                    <Grid container spacing={8}>
+                        <Grid item xs={12}>
+                            <TopBar topBarStatus={this.state.topBarStatus}/>
+                        </Grid>
+                        <div className="main-topbar-buffer"/>
+                        <Grid item sm={3}>
+                            <Paper className="main-grid-item">
+                                <UserList/>
+                            </Paper>
+                        </Grid>
+                        <Grid item sm={9}>
+                            <Paper className="main-grid-item">
+                                <Switch>
+                                    <Route exact path="/"
+                                           render={() => (
+                                               <Typography variant="body1">
+                                                   Welcome to your photosharing app! This <a
+                                                   href="https://mui.com/components/paper/">Paper</a> component
+                                                   displays the main content of the application. The {"sm={9}"} prop in
+                                                   the <a href="https://mui.com/components/grid/">Grid</a> item
+                                                   component makes it responsively
+                                                   display 9/12 of the window. The Switch component enables us to
+                                                   conditionally render different
+                                                   components to this part of the screen. You don&apos;t need to display
+                                                   anything here on the homepage,
+                                                   so you should delete this Route component once you get started.
+                                               </Typography>
+                                           )}
+                                    />
+                                    {/* :userId is a placeholder for a user ID. userId is passed as props to the UserDetail component. */}
+                                    <Route path="/users/:userId"
+                                           render={props => <UserDetail {...props}
+                                                                        updateTopBarStatus={this.updateTopBarStatus}/>}
+                                    />
+                                    <Route path="/photos/:userId"
+                                           render={props => <UserPhotos {...props}
+                                                                        updateTopBarStatus={this.updateTopBarStatus}/>}
+                                    />
+                                    <Route path="/users" component={UserList}/>
+                                </Switch>
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </div>
+            </HashRouter>
+        );
+    }
 }
 
 
 ReactDOM.render(
-  <PhotoShare />,
-  document.getElementById('photoshareapp'),
+    <PhotoShare/>,
+    document.getElementById('photoshareapp'),
 );
