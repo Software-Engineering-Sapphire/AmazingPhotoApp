@@ -17,7 +17,7 @@ class TopBar extends React.Component {
       <AppBar className="topbar-appBar" position="absolute">
         <Toolbar>
           <Typography variant="h5" color="inherit">
-              {this.props.mainStatus}
+            Name: {this.state.user.first_name + ' ' + this.state.user.last_name}
           </Typography>
         </Toolbar>
       </AppBar>
