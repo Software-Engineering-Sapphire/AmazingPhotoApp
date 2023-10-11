@@ -8,8 +8,21 @@ class UserPhotos extends React.Component {
         super(props);
         this.state = {
             photos: window.models.photoOfUserModel(this.props.match.params.userId),
-            userId: this.props.match.params.userId,
+            user: window.models.userModel(this.props.match.params.userId)
         };
+        this.updateTopBarStatus();
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.match.params.userId !== prevProps.match.params.userId) {
+            this.state.photos = window.models.photoOfUserModel(this.props.match.params.userId);
+            this.state.user = window.models.userModel(this.props.match.params.userId);
+            this.updateTopBarStatus();
+        }
+    }
+
+    updateTopBarStatus() {
+        this.props.updateTopBarStatus("Photos for " + this.state.user.first_name + " " + this.state.user.last_name)
     }
 
     render() {
@@ -18,7 +31,7 @@ class UserPhotos extends React.Component {
         return (
             <div>
                 <div key="userDetailsBtn">
-                    <Link to={`/users/${this.state.userId}`}>
+                    <Link to={`/users/${this.props.match.params.userId}`}>
                         <Button variant="contained">
                             User Photos
                         </Button>
@@ -29,7 +42,7 @@ class UserPhotos extends React.Component {
                     This should be the UserPhotos view of the PhotoShare app.
                 </Typography>
                 <Typography variant="body1">
-                    User ID: {this.state.userId}
+                    User ID: {this.props.match.params.userId}
                 </Typography>
                 <Typography variant="body1">
                     User Photos:
@@ -43,7 +56,7 @@ class UserPhotos extends React.Component {
                             <div className="wow">
                             <p>{photo.date_time}</p>
                             <img src={"../../images/" + photo.file_name}
-                                 alt={`User ${this.state.userId} Photo`}/>
+                                 alt={`User ${this.props.match.params.userId} Photo`}/>
                             </div>
                             {photo.comments.map((comment, index2) =>
 
@@ -57,6 +70,7 @@ class UserPhotos extends React.Component {
                             )}
                         </div>
                     })}
+
 
                 </div>
             </div>
