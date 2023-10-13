@@ -55,7 +55,7 @@ class UserPhotos extends React.Component {
                 <div>
                     <div key="userDetailsBtn">
                         <Button variant="contained" href={`#/users/${this.props.match.params.userId}`}>
-                            User Photos
+                            User Details
                         </Button>
                         <Divider/>
                     </div>
