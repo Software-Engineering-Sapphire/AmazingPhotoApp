@@ -71,16 +71,16 @@ class UserPhotos extends React.Component {
                                 photo.comments = [];
                             }
                             return <div key={index}>
-                                <div className="wow">
+                                <div className="borderBox">
                                 <p>{photo.date_time}</p>
                                 <img src={"../../images/" + photo.file_name}
                                      alt={`User ${this.props.match.params.userId} Photo`}/>
                                 </div>
                                 {photo.comments.map((comment, index2) =>
 
-                                    <div className="wow" key={index.toString() + index2.toString()}>
+                                    <div className="borderBox" key={index.toString() + index2.toString()}>
                                         <p>{comment.date_time}</p>
-                                        <Link to={`/users/${comment.user._id}`}>
+                                        <Link className="link" to={`/users/${comment.user._id}`}>
                                             <p>{comment.user.first_name + " " + comment.user.last_name}</p>
                                         </Link>
                                         <p>{comment.comment}</p>
