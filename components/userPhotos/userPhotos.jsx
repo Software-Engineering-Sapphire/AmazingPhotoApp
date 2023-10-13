@@ -13,7 +13,6 @@ class UserPhotos extends React.Component {
             photos: null,
             user: null
         };
-        this.updateTopBarStatus();
     }
 
     componentDidMount() {
@@ -22,13 +21,13 @@ class UserPhotos extends React.Component {
 
     fetchDataFromAPI() {
         fetchModel('/photosOfUser/' + this.props.match.params.userId)
-            .then(data => {
-                this.setState({ photos:data.data});
+            .then(returnedObject => {
+                this.setState({ photos:returnedObject.data});
             });
 
         fetchModel('/user/' + this.props.match.params.userId)
-            .then(data => {
-                this.setState({ user:data.data});
+            .then(returnedObject => {
+                this.setState({ user:returnedObject.data});
                 this.updateTopBarStatus();
             });
     }
@@ -42,7 +41,7 @@ class UserPhotos extends React.Component {
 
     updateTopBarStatus() {
         if (this.state.user !== null) {
-            this.props.updateTopBarStatus("Photos for " + this.state.user.first_name + " " + this.state.user.last_name)
+            this.props.updateTopBarStatus("Photos for " + this.state.user.first_name + " " + this.state.user.last_name);
         }
     }
 
