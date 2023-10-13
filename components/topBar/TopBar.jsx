@@ -19,6 +19,9 @@ class TopBar extends React.Component {
           <Typography variant="h5" color="inherit">
             {this.props.topBarStatus}
           </Typography>
+          <Typography className="left" variant="h5" color="inherit" >
+            Team Sapphire Version: {window.models.schemaInfo().__v}
+          </Typography>
         </Toolbar>
       </AppBar>
     );
