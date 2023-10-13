@@ -18,8 +18,8 @@ class TopBar extends React.Component {
 
   fetchDataFromAPI() {
     fetchModel('/test/info').then(returnedObject => {
-      this.state.version = returnedObject.data.__v
-    })
+      this.setState({version:returnedObject.data.__v});
+    });
   }
 
   componentDidMount() {

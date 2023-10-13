@@ -19,13 +19,13 @@ class PhotoShare extends React.Component {
         super(props);
         this.state = {
             topBarStatus: "",
-        }
+        };
         this.updateTopBarStatus = this.updateTopBarStatus.bind(this);
     }
 
     updateTopBarStatus = (updatedStatus) => {
         this.setState({topBarStatus: updatedStatus});
-    }
+    };
 
     render() {
         return (
@@ -47,8 +47,11 @@ class PhotoShare extends React.Component {
                                     <Route exact path="/"
                                            render={() => (
                                                <Typography variant="body1">
-                                                   Welcome to your photosharing app! This <a
-                                                   href="https://mui.com/components/paper/">Paper</a> component
+                                                   Welcome to your photosharing app! This
+                                                   <a
+                                                   href="https://mui.com/components/paper/">Paper
+                                                   </a>
+                                                   component
                                                    displays the main content of the application. The {"sm={9}"} prop in
                                                    the <a href="https://mui.com/components/grid/">Grid</a> item
                                                    component makes it responsively
@@ -62,12 +65,16 @@ class PhotoShare extends React.Component {
                                     />
                                     {/* :userId is a placeholder for a user ID. userId is passed as props to the UserDetail component. */}
                                     <Route path="/users/:userId"
-                                           render={props => <UserDetail {...props}
-                                                                        updateTopBarStatus={this.updateTopBarStatus}/>}
+                                           render={props => (
+                                               <UserDetail {...props}
+                                                                        updateTopBarStatus={this.updateTopBarStatus}/>
+                                           )}
                                     />
                                     <Route path="/photos/:userId"
-                                           render={props => <UserPhotos {...props}
-                                                                        updateTopBarStatus={this.updateTopBarStatus}/>}
+                                           render={props => (
+                                               <UserPhotos {...props}
+                                                                        updateTopBarStatus={this.updateTopBarStatus}/>
+                                           )}
                                     />
                                     <Route path="/users" component={UserList}/>
                                 </Switch>

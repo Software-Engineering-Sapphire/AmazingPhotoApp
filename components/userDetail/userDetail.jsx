@@ -1,8 +1,6 @@
-'use strict'
-
 import React from 'react';
 import {Button, Divider, Typography} from '@mui/material';
-import './UserDetail.css';
+import './userDetail.css';
 import fetchModel from "../../lib/fetchModelData";
 
 class UserDetail extends React.Component {
@@ -26,7 +24,7 @@ class UserDetail extends React.Component {
             });
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps) {
         if (this.props.match.params.userId !== prevProps.match.params.userId) {
             this.fetchDataFromAPI();
             this.updateTopBarStatus();
@@ -41,7 +39,7 @@ class UserDetail extends React.Component {
 
     render() {
         if (this.state.user === null) {
-            return <Typography>Loading...</Typography>
+            return <Typography>Loading...</Typography>;
         } else {
             return (
                 <div>
