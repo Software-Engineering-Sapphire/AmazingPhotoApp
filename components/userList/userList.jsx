@@ -26,6 +26,7 @@ class UserList extends React.Component {
         } else {
             return (
                 <List component="nav">
+                    <Typography> Users: </Typography>
                 {this.state.users.map((user, index) => (
                     <Box key={index}>
                         <ListItemButton href={"#/users/" + user._id}>
