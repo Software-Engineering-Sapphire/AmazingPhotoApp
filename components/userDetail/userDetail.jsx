@@ -65,6 +65,7 @@ class UserDetail extends React.Component {
                         Occupation: {this.state.user.occupation}
                     </Typography>
                 </div>
+
             );
         }
     }

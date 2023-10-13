@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Divider, Typography} from '@mui/material';
+import {Button, Divider,Typography} from '@mui/material';
 import './userPhotos.css';
 import {Link} from "react-router-dom";
 import fetchModel from "../../lib/fetchModelData";
@@ -20,17 +20,17 @@ class UserPhotos extends React.Component {
     fetchDataFromAPI() {
         fetchModel('/photosOfUser/' + this.props.match.params.userId)
             .then(returnedObject => {
-                this.setState({photos: returnedObject.data});
+                this.setState({ photos:returnedObject.data});
             });
 
         fetchModel('/user/' + this.props.match.params.userId)
             .then(returnedObject => {
-                this.setState({user: returnedObject.data});
+                this.setState({ user:returnedObject.data});
                 this.updateTopBarStatus();
             });
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.match.params.userId !== prevProps.match.params.userId) {
             this.fetchDataFromAPI();
             this.updateTopBarStatus();
@@ -46,7 +46,7 @@ class UserPhotos extends React.Component {
     render() {
         const {photos} = this.state;
         if (photos === null) {
-            return <Typography>Loading...</Typography>;
+            return <Typography>Loading...</Typography>
         } else {
             return (
                 <div>
@@ -67,26 +67,23 @@ class UserPhotos extends React.Component {
                             if (photo.comments === undefined) {
                                 photo.comments = [];
                             }
-                            return (
-                                <div key={index}>
-                                    <div className="wow">
-                                        <p>{photo.date_time}</p>
-                                        <img src={"../../images/" + photo.file_name}
-                                             alt={`User ${this.props.match.params.userId}`}/>
-                                    </div>
-                                    {photo.comments.map((comment, index2) => (
-
-                                        <div className="wow" key={index.toString() + index2.toString()}>
-                                            <p>{comment.date_time}</p>
-                                            <Link to={`/users/${comment.user._id}`}>
-                                                <p>{comment.user.first_name + " " + comment.user.last_name}</p>
-                                            </Link>
-                                            <p>{comment.comment}</p>
-                                        </div>
-                                        )
-                                    )}
+                            return <div key={index}>
+                                <div className="wow">
+                                <p>{photo.date_time}</p>
+                                <img src={"../../images/" + photo.file_name}
+                                     alt={`User ${this.props.match.params.userId} Photo`}/>
                                 </div>
-                            );
+                                {photo.comments.map((comment, index2) =>
+
+                                    <div className="wow" key={index.toString() + index2.toString()}>
+                                        <p>{comment.date_time}</p>
+                                        <Link to={`/users/${comment.user._id}`}>
+                                            <p>{comment.user.first_name + " " + comment.user.last_name}</p>
+                                        </Link>
+                                        <p>{comment.comment}</p>
+                                    </div>
+                                )}
+                            </div>
                         })}
 
 
