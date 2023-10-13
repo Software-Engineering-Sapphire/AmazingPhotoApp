@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Divider,Typography} from '@mui/material';
+import {Button, Divider, Typography} from '@mui/material';
 import './userPhotos.css';
 import {Link} from "react-router-dom";
 import fetchModel from "../../lib/fetchModelData";
@@ -20,12 +20,12 @@ class UserPhotos extends React.Component {
     fetchDataFromAPI() {
         fetchModel('/photosOfUser/' + this.props.match.params.userId)
             .then(returnedObject => {
-                this.setState({ photos:returnedObject.data});
+                this.setState({photos: returnedObject.data});
             });
 
         fetchModel('/user/' + this.props.match.params.userId)
             .then(returnedObject => {
-                this.setState({ user:returnedObject.data});
+                this.setState({user: returnedObject.data});
                 this.updateTopBarStatus();
             });
     }
@@ -47,7 +47,7 @@ class UserPhotos extends React.Component {
         const {photos} = this.state;
         if (photos === null) {
             return <Typography>Loading...</Typography>
-        } else {
+        } else if (!this.props.advancedFeatures) {
             return (
                 <div>
                     <div key="userDetailsBtn">
@@ -69,9 +69,9 @@ class UserPhotos extends React.Component {
                             }
                             return <div key={index}>
                                 <div className="borderBox">
-                                <p>{photo.date_time}</p>
-                                <img src={"../../images/" + photo.file_name}
-                                     alt={`User ${this.props.match.params.userId} Photo`}/>
+                                    <p>{photo.date_time}</p>
+                                    <img src={"../../images/" + photo.file_name}
+                                         alt={`User ${this.props.match.params.userId} Photo`}/>
                                 </div>
                                 {photo.comments.map((comment, index2) =>
 
@@ -85,10 +85,14 @@ class UserPhotos extends React.Component {
                                 )}
                             </div>
                         })}
-
-
                     </div>
                 </div>
+            );
+        } else {
+            return (
+                <Typography>
+                    Advanced features enabled!
+                </Typography>
             );
         }
     }
