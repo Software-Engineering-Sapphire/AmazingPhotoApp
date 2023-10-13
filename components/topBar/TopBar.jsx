@@ -3,6 +3,7 @@ import {
   AppBar, Toolbar, Typography
 } from '@mui/material';
 import './TopBar.css';
+import fetchModel from "../../lib/fetchModelData";
 
 /**
  * Define TopBar, a React componment of project #5
@@ -10,6 +11,19 @@ import './TopBar.css';
 class TopBar extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      version: undefined
+    };
+  }
+
+  fetchDataFromAPI() {
+    fetchModel('/test/info').then(returnedObject => {
+      this.state.version = returnedObject.data.__v
+    })
+  }
+
+  componentDidMount() {
+    this.fetchDataFromAPI();
   }
 
   render() {
@@ -20,7 +34,7 @@ class TopBar extends React.Component {
             {this.props.topBarStatus}
           </Typography>
           <Typography className="left" variant="h5" color="inherit" >
-            Team Sapphire Version: {window.models.schemaInfo().__v}
+            Team Sapphire Version: {this.state.version}
           </Typography>
         </Toolbar>
       </AppBar>

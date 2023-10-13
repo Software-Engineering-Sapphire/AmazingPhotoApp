@@ -20,8 +20,8 @@ class UserDetail extends React.Component {
 
     fetchDataFromAPI() {
         fetchModel('/user/' + this.props.match.params.userId)
-            .then(data => {
-                this.setState({ user:data.data});
+            .then(returnedObject => {
+                this.setState({ user:returnedObject.data});
                 this.updateTopBarStatus();
             });
     }
