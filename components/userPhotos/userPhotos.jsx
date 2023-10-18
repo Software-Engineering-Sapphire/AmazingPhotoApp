@@ -30,7 +30,7 @@ class UserPhotos extends React.Component {
             });
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps) {
         if (this.props.match.params.userId !== prevProps.match.params.userId) {
             this.fetchDataFromAPI();
             this.updateTopBarStatus();
@@ -46,8 +46,8 @@ class UserPhotos extends React.Component {
     render() {
         const {photos} = this.state;
         if (photos === null) {
-            return <Typography>Loading...</Typography>
-        } else if (!this.props.advancedFeatures) {
+            return <Typography>Loading...</Typography>;
+        } else {
             return (
                 <div>
                     <div key="userDetailsBtn">
@@ -67,23 +67,26 @@ class UserPhotos extends React.Component {
                             if (photo.comments === undefined) {
                                 photo.comments = [];
                             }
-                            return <div key={index}>
-                                <div className="borderBox">
+                            return (
+                                <div key={index}>
+                                    <div className="borderBox">
                                     <p>{photo.date_time}</p>
                                     <img src={"../../images/" + photo.file_name}
-                                         alt={`User ${this.props.match.params.userId} Photo`}/>
-                                </div>
-                                {photo.comments.map((comment, index2) =>
-
-                                    <div className="borderBox" key={index.toString() + index2.toString()}>
-                                        <p>{comment.date_time}</p>
-                                        <Link to={`/users/${comment.user._id}`}>
-                                            <p>{comment.user.first_name + " " + comment.user.last_name}</p>
-                                        </Link>
-                                        <p>{comment.comment}</p>
+                                         alt={`User ${this.props.match.params.userId}`}/>
                                     </div>
-                                )}
-                            </div>
+                                    {photo.comments.map((comment, index2) => (
+                                        <div
+                                        className="borderBox" key={index.toString() + index2.toString()}>
+                                            <p>{comment.date_time}</p>
+                                            <Link to={`/users/${comment.user._id}`}>
+                                                <p>{comment.user.first_name + " " + comment.user.last_name}</p>
+                                            </Link>
+                                            <p>{comment.comment}</p>
+                                        </div>
+                                        )
+                                    )}
+                                </div>
+                            );
                         })}
                     </div>
                 </div>
