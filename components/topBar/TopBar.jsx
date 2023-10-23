@@ -3,7 +3,7 @@ import {
     AppBar, Toolbar, Typography, Checkbox,
 } from '@mui/material';
 import './TopBar.css';
-import fetchModel from "../../lib/fetchModelData";
+import axios from 'axios';
 
 /**
  * Define TopBar, a React componment of project #5
@@ -17,7 +17,7 @@ class TopBar extends React.Component {
     }
 
     fetchDataFromAPI() {
-        fetchModel('/test/info').then(returnedObject => {
+       axios.get('/test/info').then(returnedObject => {
             this.setState({version: returnedObject.data.__v});
         });
     }
