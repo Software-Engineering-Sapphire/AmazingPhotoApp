@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, Divider,Typography} from '@mui/material';
 import './userPhotos.css';
 import {Link} from "react-router-dom";
-import fetchModel from "../../lib/fetchModelData";
+import axios from 'axios';
 
 class UserPhotos extends React.Component {
     constructor(props) {
@@ -18,12 +18,12 @@ class UserPhotos extends React.Component {
     }
 
     fetchDataFromAPI() {
-        fetchModel('/photosOfUser/' + this.props.match.params.userId)
+        axios.get('/photosOfUser/' + this.props.match.params.userId)
             .then(returnedObject => {
                 this.setState({ photos:returnedObject.data});
             });
 
-        fetchModel('/user/' + this.props.match.params.userId)
+        axios.get('/user/' + this.props.match.params.userId)
             .then(returnedObject => {
                 this.setState({ user:returnedObject.data});
                 this.updateTopBarStatus();
@@ -45,9 +45,12 @@ class UserPhotos extends React.Component {
 
     render() {
         const {photos} = this.state;
-        if (photos === null) {
+        if (photos === null)
+        {
             return <Typography>Loading...</Typography>;
-        } else {
+        }
+        else
+        {
             return (
                 <div>
                     <div key="userDetailsBtn">

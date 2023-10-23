@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, Divider, Typography} from '@mui/material';
 import './userDetail.css';
-import fetchModel from "../../lib/fetchModelData";
+import axios from 'axios';
 
 class UserDetail extends React.Component {
     constructor(props) {
@@ -17,7 +17,7 @@ class UserDetail extends React.Component {
     }
 
     fetchDataFromAPI() {
-        fetchModel('/user/' + this.props.match.params.userId)
+        axios.get('/user/' + this.props.match.params.userId)
             .then(returnedObject => {
                 this.setState({ user:returnedObject.data});
                 this.updateTopBarStatus();

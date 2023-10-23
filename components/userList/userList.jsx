@@ -2,7 +2,7 @@ import React from 'react';
 import {Divider, List, ListItemButton, ListItemText, Typography} from '@mui/material';
 import './userList.css';
 import {Box} from "@mui/system";
-import fetchModel from "../../lib/fetchModelData";
+import axios from 'axios';
 
 
 class UserList extends React.Component {
@@ -14,7 +14,7 @@ class UserList extends React.Component {
     }
 
     componentDidMount() {
-        fetchModel('/user/list')
+        axios.get('/user/list')
             .then(returnedObject => {
                 this.setState({users: returnedObject.data});
             });
