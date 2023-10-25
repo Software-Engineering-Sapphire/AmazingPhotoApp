@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Divider,Typography} from '@mui/material';
+import {Button, Divider, Typography} from '@mui/material';
 import './userPhotos.css';
 import {Link} from "react-router-dom";
 import fetchModel from "../../lib/fetchModelData";
@@ -20,12 +20,12 @@ class UserPhotos extends React.Component {
     fetchDataFromAPI() {
         fetchModel('/photosOfUser/' + this.props.match.params.userId)
             .then(returnedObject => {
-                this.setState({ photos:returnedObject.data});
+                this.setState({photos: returnedObject.data});
             });
 
         fetchModel('/user/' + this.props.match.params.userId)
             .then(returnedObject => {
-                this.setState({ user:returnedObject.data});
+                this.setState({user: returnedObject.data});
                 this.updateTopBarStatus();
             });
     }
@@ -88,10 +88,14 @@ class UserPhotos extends React.Component {
                                 </div>
                             );
                         })}
-
-
                     </div>
                 </div>
+            );
+        } else {
+            return (
+                <Typography>
+                    Advanced features enabled!
+                </Typography>
             );
         }
     }
