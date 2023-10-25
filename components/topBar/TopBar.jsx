@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    AppBar, Toolbar, Typography, Checkbox,
+    AppBar, Toolbar, Typography
 } from '@mui/material';
 import './TopBar.css';
 import axios from 'axios';
@@ -25,11 +25,6 @@ class TopBar extends React.Component {
     componentDidMount() {
         this.fetchDataFromAPI();
     }
-
-    handleCheckboxChange = (event) => {
-        this.props.toggleAdvancedFeatures(event.target.checked);
-    };
-
     render() {
         return (
             <AppBar className="topbar-appBar" position="absolute">
@@ -37,15 +32,9 @@ class TopBar extends React.Component {
                     <Typography variant="h5" color="inherit">
                         {this.props.topBarStatus}
                     </Typography>
-                    <Checkbox
-                        checked={this.props.advancedFeatures}
-                        onChange={this.handleCheckboxChange}
-                        style={{color: '#fff'}}
-                    />
                     <Typography className="left" variant="h5" color="inherit">
                         Team Sapphire Version: {this.state.version}
                     </Typography>
-
                 </Toolbar>
             </AppBar>
         );
