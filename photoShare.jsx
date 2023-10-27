@@ -47,7 +47,7 @@ class PhotoShare extends React.Component {
                         <div className="main-topbar-buffer"/>
                         <Grid item sm={3}>
                             <Paper className="main-grid-item">
-                                <UserList/>
+                                <UserList advancedFeatures={this.state.advancedFeatures}/>
                             </Paper>
                         </Grid>
                         <Grid item sm={9}>

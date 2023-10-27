@@ -1,5 +1,5 @@
 import React from 'react';
-import {Divider, List, ListItemButton, ListItemText, Typography} from '@mui/material';
+import {Chip, Divider, List, ListItemButton, ListItemText, Typography} from '@mui/material';
 import './userList.css';
 import {Box} from "@mui/system";
 import axios from 'axios';
@@ -17,7 +17,7 @@ class UserList extends React.Component {
         axios.get('/user/list')
             .then(returnedObject => {
                 this.setState({users: returnedObject.data});
-            }) .catch((err) => {
+            }).catch((err) => {
             console.error(err);
             });
     }
@@ -33,6 +33,12 @@ class UserList extends React.Component {
                     <Box key={index}>
                         <ListItemButton href={"#/users/" + user._id}>
                             <ListItemText primary={user.first_name + ' ' + user.last_name}/>
+                            {this.props.advancedFeatures && (
+                                <>
+                                    <Chip label="#" component="a" href={"#/photos/" + user._id} color="success" size="small" clickable />
+                                    <Chip label="#" component="a" href={"#/comments/" + user._id} color="error" size="small" clickable />
+                                </>
+                            )}
                         </ListItemButton>
                         <Divider/>
                     </Box>
