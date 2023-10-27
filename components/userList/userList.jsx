@@ -17,6 +17,8 @@ class UserList extends React.Component {
         axios.get('/user/list')
             .then(returnedObject => {
                 this.setState({users: returnedObject.data});
+            }) .catch((err) => {
+            console.error(err);
             });
     }
 

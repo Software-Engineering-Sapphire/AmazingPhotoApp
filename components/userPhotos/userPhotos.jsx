@@ -21,11 +21,15 @@ class UserPhotos extends React.Component {
         axios.get('/photosOfUser/' + this.props.match.params.userId)
             .then(returnedObject => {
                 this.setState({ photos:returnedObject.data});
+            }) .catch((err) => {
+            console.error(err);
             });
 
         axios.get('/user/' + this.props.match.params.userId)
             .then(returnedObject => {
                 this.setState({ user:returnedObject.data});
+            }) .catch((err) => {
+            console.error(err);
                 this.updateTopBarStatus();
             });
     }

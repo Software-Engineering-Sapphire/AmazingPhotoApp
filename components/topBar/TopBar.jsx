@@ -17,10 +17,11 @@ class TopBar extends React.Component {
     }
 
     fetchDataFromAPI() {
-        axios.get('/test/info')
-            .then(returnedObject => {
-                this.setState({version: returnedObject.data.__v});
-            });
+       axios.get('/test/info').then(returnedObject => {
+            this.setState({version: returnedObject.data.__v});
+       }).catch((err) => {
+           console.error(err);
+        });
     }
 
     componentDidMount() {
