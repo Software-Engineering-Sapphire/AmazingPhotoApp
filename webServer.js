@@ -154,9 +154,9 @@ app.get("/test/:p1", function (request, response) {
  */
 app.get("/user/list", function (request, response) {
     User.find({}, {
-        "_id": 1,
-        "first_name": 1,
-        "last_name": 1
+        _id: 1,
+        first_name: 1,
+        last_name: 1
     }, function (err, users) {
         if (err) {
             console.error("Error in /user/list", err);
@@ -178,7 +178,7 @@ app.get("/user/list", function (request, response) {
  */
 app.get("/user/:id", function (request, response) {
     const id = request.params.id;
-    User.find({"_id": {$eq: id}}, {__v: 0}, function (err, user) {
+    User.find({_id: {$eq: id}}, {__v: 0}, function (err, user) {
         if (err) {
             console.error("Error in /user/:id", err);
             response.status(500)
@@ -201,36 +201,36 @@ app.get("/photosOfUser/:id", function (request, response) {
     const id = request.params.id;
     Photo.aggregate([
         {
-            "$match":
-                {"user_id": {"$eq": new mongoose.Types.ObjectId(id)}}
+            $match:
+                {user_id: {$eq: new mongoose.Types.ObjectId(id)}}
         },
         {
-            "$addFields": {
-                "comments": {"$ifNull": ["$comments", []]}
+            $addFields: {
+                comments: {$ifNull: ["$comments", []]}
             }
         },
         {
-            "$lookup": {
-                "from": "users",
-                "localField": "comments.user_id",
-                "foreignField": "_id",
-                "as": "users"
+            $lookup: {
+                from: "users",
+                localField: "comments.user_id",
+                foreignField: "_id",
+                as: "users"
             }
         },
         {
-            "$addFields": {
-                "comments": {
-                    "$map": {
-                        "input": "$comments",
-                        "in": {
-                            "$mergeObjects": [
+            $addFields: {
+                comments: {
+                    $map: {
+                        input: "$comments",
+                        in: {
+                            $mergeObjects: [
                                 "$$this",
                                 {
-                                    "user": {
-                                        "$arrayElemAt": [
+                                    user: {
+                                        $arrayElemAt: [
                                             "$users",
                                             {
-                                                "$indexOfArray": [
+                                                $indexOfArray: [
                                                     "$users._id",
                                                     "$$this.user_id"
                                                 ]
@@ -245,9 +245,9 @@ app.get("/photosOfUser/:id", function (request, response) {
             }
         },
         {
-            "$project": {
-                "users": 0,
-                "__v": 0,
+            $project: {
+                users: 0,
+                __v: 0,
                 "comments.__v": 0,
                 "comments.user_id": 0,
                 "comments.user.location": 0,
