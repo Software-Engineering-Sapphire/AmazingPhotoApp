@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    AppBar, Toolbar, Typography, Checkbox
+    AppBar, Toolbar, Typography, Checkbox, FormControlLabel
 } from '@mui/material';
 import './TopBar.css';
 import axios from 'axios';
@@ -17,11 +17,13 @@ class TopBar extends React.Component {
     }
 
     fetchDataFromAPI() {
-       axios.get('/test/info').then(returnedObject => {
-            this.setState({version: returnedObject.data.__v});
-       }).catch((err) => {
-           console.error(err);
-        });
+        axios.get('/test/info')
+            .then(returnedObject => {
+                this.setState({version: returnedObject.data.__v});
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     }
 
     componentDidMount() {
@@ -35,15 +37,17 @@ class TopBar extends React.Component {
     render() {
         return (
             <AppBar className="topbar-appBar" position="absolute">
-                <Toolbar>
+                <Toolbar className="topbar-toolbar">
                     <Typography variant="h5" color="inherit">
                         {this.props.topBarStatus}
                     </Typography>
-                    <Checkbox checked={this.props.advancedFeatures}
-                              onChange={this.handleCheckboxChange}
-                              style={{color: '#FFF'}}
-                    />
-                    <Typography className="left" variant="h5" color="inherit">
+                    <FormControlLabel control={(
+                        <Checkbox checked={this.props.advancedFeatures}
+                                  onChange={this.handleCheckboxChange}
+                                  style={{color: '#FFF'}}
+                        />
+                    )} label="Advanced Features"/>
+                    <Typography variant="h5" color="inherit">
                         Team Sapphire Version: {this.state.version}
                     </Typography>
                 </Toolbar>
