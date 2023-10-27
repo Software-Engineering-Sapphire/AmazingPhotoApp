@@ -1,7 +1,6 @@
 import React from 'react';
 import {Button, Divider, Typography} from '@mui/material';
 import './userComments.css';
-import {Link} from "react-router-dom";
 import axios from 'axios';
 
 class UserComments extends React.Component {
@@ -72,7 +71,7 @@ class UserComments extends React.Component {
                         return (
                             <>
                                 <div key={index} className="comment-block">
-                                    <img src={'../../images/'+comment.photo_name} />
+                                    <img src={'../../images/'+comment.photo_name} alt="related to this comment"/>
                                     <div>
                                         <Typography variant="body1">
                                             {comment.text}
