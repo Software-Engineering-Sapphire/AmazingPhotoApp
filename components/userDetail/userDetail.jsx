@@ -20,6 +20,8 @@ class UserDetail extends React.Component {
         axios.get('/user/' + this.props.match.params.userId)
             .then(returnedObject => {
                 this.setState({ user:returnedObject.data});
+            }) .catch((err) => {
+            console.error(err);
                 this.updateTopBarStatus();
             });
     }
