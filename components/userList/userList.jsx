@@ -45,7 +45,6 @@ class UserList extends React.Component {
                     });
             });
         }
-        console.log(this.state.users);
     }
 
     render() {
