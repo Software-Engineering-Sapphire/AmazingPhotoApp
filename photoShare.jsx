@@ -19,12 +19,18 @@ class PhotoShare extends React.Component {
         super(props);
         this.state = {
             topBarStatus: "",
+            advancedFeatures: false
         };
         this.updateTopBarStatus = this.updateTopBarStatus.bind(this);
+        this.toggleAdvancedFeatures = this.toggleAdvancedFeatures.bind(this);
     }
 
     updateTopBarStatus = (updatedStatus) => {
         this.setState({topBarStatus: updatedStatus});
+    };
+
+    toggleAdvancedFeatures = (advancedFeaturesBool) => {
+        this.setState({advancedFeatures: advancedFeaturesBool});
     };
 
     render() {
@@ -33,7 +39,10 @@ class PhotoShare extends React.Component {
                 <div>
                     <Grid container spacing={8}>
                         <Grid item xs={12}>
-                            <TopBar topBarStatus={this.state.topBarStatus}/>
+                            <TopBar topBarStatus={this.state.topBarStatus}
+                                    advancedFeatures={this.state.advancedFeatures}
+                                    toggleAdvancedFeatures={this.toggleAdvancedFeatures}
+                            />
                         </Grid>
                         <div className="main-topbar-buffer"/>
                         <Grid item sm={3}>
@@ -49,13 +58,15 @@ class PhotoShare extends React.Component {
                                     <Route path="/users/:userId"
                                            render={props => (
                                                <UserDetail {...props}
-                                                                        updateTopBarStatus={this.updateTopBarStatus}/>
+                                                           updateTopBarStatus={this.updateTopBarStatus}/>
                                            )}
                                     />
                                     <Route path="/photos/:userId"
                                            render={props => (
                                                <UserPhotos {...props}
-                                                                        updateTopBarStatus={this.updateTopBarStatus}/>
+                                                           updateTopBarStatus={this.updateTopBarStatus}
+                                                           advancedFeatures={this.state.advancedFeatures}
+                                               />
                                            )}
                                     />
                                     <Route path="/users" component={UserList}/>
