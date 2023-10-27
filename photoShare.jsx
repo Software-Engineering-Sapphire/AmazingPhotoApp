@@ -13,6 +13,7 @@ import TopBar from './components/topBar/TopBar';
 import UserDetail from './components/userDetail/userDetail';
 import UserList from './components/userList/userList';
 import UserPhotos from './components/userPhotos/userPhotos';
+import UserComments from './components/userComments/userComments';
 
 class PhotoShare extends React.Component {
     constructor(props) {
@@ -66,6 +67,14 @@ class PhotoShare extends React.Component {
                                                <UserPhotos {...props}
                                                            updateTopBarStatus={this.updateTopBarStatus}
                                                            advancedFeatures={this.state.advancedFeatures}
+                                               />
+                                           )}
+                                    />
+                                    <Route path="/comments/:userId"
+                                           render={props => (
+                                               <UserComments {...props}
+                                                             updateTopBarStatus={this.updateTopBarStatus}
+                                                             advancedFeatures={this.state.advancedFeatures}
                                                />
                                            )}
                                     />
