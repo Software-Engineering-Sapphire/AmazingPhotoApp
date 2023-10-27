@@ -285,8 +285,9 @@ app.get("/commentsOfUser/:id", function (request, response) {
             $project: {
                 _id: "$comments._id",
                 user_id: "$comments.user_id",
+                photo_name: "$file_name",
                 date_time: "$comments.date_time",
-                comment: "$comments.comment",
+                text: "$comments.comment",
             },
         },
         {
