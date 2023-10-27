@@ -45,7 +45,7 @@ const Photo = require("./schema/photo.js");
 const SchemaInfo = require("./schema/schemaInfo.js");
 
 mongoose.set("strictQuery", false);
-mongoose.connect("mongodb+srv://btd:8U5zSE47tPd6kIZU@cluster0.waksdrs.mongodb.net/project6?retryWrites=true&w=majority", {
+mongoose.connect("mongodb://127.0.0.1/project6", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
