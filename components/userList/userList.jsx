@@ -35,8 +35,8 @@ class UserList extends React.Component {
                             <ListItemText primary={user.first_name + ' ' + user.last_name}/>
                             {this.props.advancedFeatures && (
                                 <>
-                                    <Chip label="#" component="a" href={"#/photos/" + user._id} color="success" size="small" clickable />
-                                    <Chip label="#" component="a" href={"#/comments/" + user._id} color="error" size="small" clickable />
+                                    <Chip label={"0" } component="a" href={"#/photos/" + user._id} color="success" size="small" clickable />
+                                    <Chip label={"0" } component="a" href={"#/comments/" + user._id} color="error" size="small" clickable />
                                 </>
                             )}
                         </ListItemButton>
