@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Divider,Typography} from '@mui/material';
+import {Button, Divider, Typography} from '@mui/material';
 import './userPhotos.css';
 import {Link} from "react-router-dom";
 import axios from 'axios';
@@ -20,24 +20,25 @@ class UserPhotos extends React.Component {
     fetchDataFromAPI() {
         axios.get('/photosOfUser/' + this.props.match.params.userId)
             .then(returnedObject => {
-                this.setState({ photos:returnedObject.data});
-            }) .catch((err) => {
-            console.error(err);
+                this.setState({photos: returnedObject.data});
+            })
+            .catch((err) => {
+                console.error(err);
             });
 
         axios.get('/user/' + this.props.match.params.userId)
             .then(returnedObject => {
-                this.setState({ user:returnedObject.data});
-            }) .catch((err) => {
-            console.error(err);
+                this.setState({user: returnedObject.data});
                 this.updateTopBarStatus();
+            })
+            .catch((err) => {
+                console.error(err);
             });
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.match.params.userId !== prevProps.match.params.userId) {
             this.fetchDataFromAPI();
-            this.updateTopBarStatus();
         }
     }
 
@@ -49,12 +50,9 @@ class UserPhotos extends React.Component {
 
     render() {
         const {photos} = this.state;
-        if (photos === null)
-        {
+        if (photos === null) {
             return <Typography>Loading...</Typography>;
-        }
-        else
-        {
+        } else {
             return (
                 <div>
                     <div key="userDetailsBtn">
@@ -77,26 +75,24 @@ class UserPhotos extends React.Component {
                             return (
                                 <div key={index}>
                                     <div className="borderBox">
-                                    <p>{photo.date_time}</p>
-                                    <img src={"../../images/" + photo.file_name}
-                                         alt={`User ${this.props.match.params.userId}`}/>
+                                        <p>{photo.date_time}</p>
+                                        <img src={"../../images/" + photo.file_name}
+                                             alt={`User ${this.props.match.params.userId}`}/>
                                     </div>
                                     {photo.comments.map((comment, index2) => (
-                                        <div
-                                        className="borderBox" key={index.toString() + index2.toString()}>
-                                            <p>{comment.date_time}</p>
-                                            <Link to={`/users/${comment.user._id}`}>
-                                                <p>{comment.user.first_name + " " + comment.user.last_name}</p>
-                                            </Link>
-                                            <p>{comment.comment}</p>
-                                        </div>
+                                            <div
+                                                className="borderBox" key={index.toString() + index2.toString()}>
+                                                <p>{comment.date_time}</p>
+                                                <Link to={`/users/${comment.user._id}`}>
+                                                    <p>{comment.user.first_name + " " + comment.user.last_name}</p>
+                                                </Link>
+                                                <p>{comment.comment}</p>
+                                            </div>
                                         )
                                     )}
                                 </div>
                             );
                         })}
-
-
                     </div>
                 </div>
             );

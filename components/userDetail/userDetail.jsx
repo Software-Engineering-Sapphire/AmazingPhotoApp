@@ -9,7 +9,6 @@ class UserDetail extends React.Component {
         this.state = {
             user: null
         };
-        this.updateTopBarStatus();
     }
 
     componentDidMount() {
@@ -19,17 +18,17 @@ class UserDetail extends React.Component {
     fetchDataFromAPI() {
         axios.get('/user/' + this.props.match.params.userId)
             .then(returnedObject => {
-                this.setState({ user:returnedObject.data});
-            }) .catch((err) => {
-            console.error(err);
+                this.setState({user: returnedObject.data});
                 this.updateTopBarStatus();
+            })
+            .catch((err) => {
+                console.error(err);
             });
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.match.params.userId !== prevProps.match.params.userId) {
             this.fetchDataFromAPI();
-            this.updateTopBarStatus();
         }
     }
 
