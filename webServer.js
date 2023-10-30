@@ -31,6 +31,11 @@
  *                      (JSON format).
  */
 
+// ADDED IN PROJ7
+const session = require("express-session");
+const bodyParser = require("body-parser");
+const multer = require("multer");
+
 const mongoose = require("mongoose");
 mongoose.Promise = require("bluebird");
 
@@ -53,6 +58,9 @@ mongoose.connect("mongodb://127.0.0.1/project6", {
 // We have the express static module
 // (http://expressjs.com/en/starter/static-files.html) do all the work for us.
 app.use(express.static(__dirname));
+// ADDED IN PROJ7
+app.use(session({secret: "secretKey", resave: false, saveUninitialized: false}));
+app.use(bodyParser.json());
 
 app.get("/", function (request, response) {
     response.send("Simple web server of files from " + __dirname);
