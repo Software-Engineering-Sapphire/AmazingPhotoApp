@@ -35,6 +35,9 @@ class TopBar extends React.Component {
     };
 
     render() {
+        if (!this.state.version) {
+            this.fetchDataFromAPI();
+        }
         return (
             <AppBar className="topbar-appBar" position="absolute">
                 <Toolbar className="topbar-toolbar">
