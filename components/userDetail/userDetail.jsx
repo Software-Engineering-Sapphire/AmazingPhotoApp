@@ -19,7 +19,6 @@ class UserDetail extends React.Component {
         axios.get('/user/' + this.props.match.params.userId)
             .then(returnedObject => {
                 this.setState({user: returnedObject.data});
-                this.updateTopBarStatus();
             })
             .catch((err) => {
                 console.error(err);
@@ -31,13 +30,6 @@ class UserDetail extends React.Component {
             this.fetchDataFromAPI();
         }
     }
-
-    updateTopBarStatus() {
-        if (this.state.user !== null) {
-            this.props.updateTopBarStatus(this.state.user.first_name + " " + this.state.user.last_name);
-        }
-    }
-
     render() {
         if (this.state.user === null) {
             return <Typography>Loading...</Typography>;

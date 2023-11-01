@@ -55,8 +55,8 @@ mongoose.connect("mongodb://127.0.0.1/project6", {
     useUnifiedTopology: true,
 });
 
-// We have the express static module
-// (http://expressjs.com/en/starter/static-files.html) do all the work for us.
+// (http://expressjs.com/en/starter/static-files.html) do all
+// // We have the express static module the work for us.
 app.use(express.static(__dirname));
 // ADDED IN PROJ7
 app.use(session({secret: "secretKey", resave: false, saveUninitialized: false}));
@@ -79,81 +79,82 @@ app.get("/", function (request, response) {
  *                in JSON format.
  */
 app.get("/test/:p1", function (request, response) {
-    // Express parses the ":p1" from the URL and returns it in the request.params
-    // objects.
-    console.log("/test called with param1 = ", request.params.p1);
+    if (request.session.login_name) {
 
-    const param = request.params.p1 || "info";
+        const param = request.params.p1 || "info";
 
-    if (param === "info") {
-        // Fetch the SchemaInfo. There should only one of them. The query of {} will
-        // match it.
-        SchemaInfo.find({}, function (err, info) {
-            if (err) {
-                // Query returned an error. We pass it back to the browser with an
-                // Internal Service Error (500) error code.
-                console.error("Error in /user/info:", err);
-                response.status(500)
-                    .send(JSON.stringify(err));
-                return;
-            }
-            if (info.length === 0) {
-                // Query didn't return an error but didn't find the SchemaInfo object -
-                // This is also an internal error return.
-                response.status(400)
-                    .send("Missing SchemaInfo");
-                return;
-            }
-
-            // We got the object - return it in JSON format.
-            console.log("SchemaInfo", info[0]);
-            response.end(JSON.stringify(info[0]));
-        });
-    } else if (param === "counts") {
-        // In order to return the counts of all the collections we need to do an
-        // async call to each collections. That is tricky to do so we use the async
-        // package do the work. We put the collections into array and use async.each
-        // to do each .count() query.
-        const collections = [
-            {
-                name: "user",
-                collection: User
-            },
-            {
-                name: "photo",
-                collection: Photo
-            },
-            {
-                name: "schemaInfo",
-                collection: SchemaInfo
-            },
-        ];
-        async.each(
-            collections,
-            function (col, done_callback) {
-                col.collection.countDocuments({}, function (err, count) {
-                    col.count = count;
-                    done_callback(err);
-                });
-            },
-            function (err) {
+        if (param === "info") {
+            // Fetch the SchemaInfo. There should only one of them. The query of {} will
+            // match it.
+            SchemaInfo.find({}, function (err, info) {
                 if (err) {
+                    // Query returned an error. We pass it back to the browser with an
+                    // Internal Service Error (500) error code.
+                    console.error("Error in /user/info:", err);
                     response.status(500)
                         .send(JSON.stringify(err));
-                } else {
-                    const obj = {};
-                    for (let i = 0; i < collections.length; i++) {
-                        obj[collections[i].name] = collections[i].count;
-                    }
-                    response.end(JSON.stringify(obj));
+                    return;
                 }
-            }
-        );
+                if (info.length === 0) {
+                    // Query didn't return an error but didn't find the SchemaInfo object -
+                    // This is also an internal error return.
+                    response.status(400)
+                        .send("Missing SchemaInfo");
+                    return;
+                }
+
+                // We got the object - return it in JSON format.
+                console.log("SchemaInfo", info[0]);
+                response.end(JSON.stringify(info[0]));
+            });
+        } else if (param === "counts") {
+            // In order to return the counts of all the collections we need to do an
+            // async call to each collections. That is tricky to do so we use the async
+            // package do the work. We put the collections into array and use async.each
+            // to do each .count() query.
+            const collections = [
+                {
+                    name: "user",
+                    collection: User
+                },
+                {
+                    name: "photo",
+                    collection: Photo
+                },
+                {
+                    name: "schemaInfo",
+                    collection: SchemaInfo
+                },
+            ];
+            async.each(
+                collections,
+                function (col, done_callback) {
+                    col.collection.countDocuments({}, function (err, count) {
+                        col.count = count;
+                        done_callback(err);
+                    });
+                },
+                function (err) {
+                    if (err) {
+                        response.status(500)
+                            .send(JSON.stringify(err));
+                    } else {
+                        const obj = {};
+                        for (let i = 0; i < collections.length; i++) {
+                            obj[collections[i].name] = collections[i].count;
+                        }
+                        response.end(JSON.stringify(obj));
+                    }
+                }
+            );
+        } else {
+            // If we know understand the parameter we return a (Bad Parameter) (400)
+            // status.
+            response.status(400)
+                .send("Bad param " + param);
+        }
     } else {
-        // If we know understand the parameter we return a (Bad Parameter) (400)
-        // status.
-        response.status(400)
-            .send("Bad param " + param);
+        response.status(401).send();
     }
 });
 
@@ -161,162 +162,213 @@ app.get("/test/:p1", function (request, response) {
  * URL /user/list - Returns all the User objects.
  */
 app.get("/user/list", function (request, response) {
-    User.find({}, {
-        _id: 1,
-        first_name: 1,
-        last_name: 1
-    }, function (err, users) {
-        if (err) {
-            console.error("Error in /user/list", err);
-            response.status(500)
-                .send(JSON.stringify(err));
-            return;
-        }
-        if (users.length === 0) {
-            response.status(400)
-                .send();
-            return;
-        }
-        response.end(JSON.stringify(users));
-    });
+    if (request.session.login_name) {
+        User.find({}, {
+            _id: 1,
+            first_name: 1,
+            last_name: 1
+        }, function (err, users) {
+            if (err) {
+                console.error("Error in /user/list", err);
+                response.status(500)
+                    .send(JSON.stringify(err));
+                return;
+            }
+            if (users.length === 0) {
+                response.status(400)
+                    .send();
+                return;
+            }
+            response.end(JSON.stringify(users));
+        });
+    } else {
+        response.status(401).send();
+    }
 });
 
 /**
  * URL /user/:id - Returns the information for User (id).
  */
 app.get("/user/:id", function (request, response) {
-    const id = request.params.id;
-    User.find({_id: {$eq: id}}, {__v: 0}, function (err, user) {
-        if (err) {
-            console.error("Error in /user/:id", err);
-            response.status(500)
-                .send(JSON.stringify(err));
-            return;
-        }
-        if (user.length === 0) {
-            response.status(400)
-                .send();
-            return;
-        }
-        response.end(JSON.stringify(user[0]));
-    });
+    if (request.session.login_name) {
+        const id = request.params.id;
+        User.find({_id: {$eq: id}}, {__v: 0}, function (err, user) {
+            if (err) {
+                console.error("Error in /user/:id", err);
+                response.status(500)
+                    .send(JSON.stringify(err));
+                return;
+            }
+            if (user.length === 0) {
+                response.status(400)
+                    .send();
+                return;
+            }
+            response.end(JSON.stringify(user[0]));
+        });
+    } else {
+        response.status(401).send();
+    }
 });
 
 /**
  * URL /photosOfUser/:id - Returns the Photos for User (id).
  */
 app.get("/photosOfUser/:id", function (request, response) {
-    const id = request.params.id;
-    Photo.aggregate([
-        {
-            $match:
-                {user_id: {$eq: new mongoose.Types.ObjectId(id)}}
-        },
-        {
-            $addFields: {
-                comments: {$ifNull: ["$comments", []]}
-            }
-        },
-        {
-            $lookup: {
-                from: "users",
-                localField: "comments.user_id",
-                foreignField: "_id",
-                as: "users"
-            }
-        },
-        {
-            $addFields: {
-                comments: {
-                    $map: {
-                        input: "$comments",
-                        in: {
-                            $mergeObjects: [
-                                "$$this",
-                                {
-                                    user: {
-                                        $arrayElemAt: [
-                                            "$users",
-                                            {
-                                                $indexOfArray: [
-                                                    "$users._id",
-                                                    "$$this.user_id"
-                                                ]
-                                            }
-                                        ]
+    if (request.session.login_name) {
+        const id = request.params.id;
+        Photo.aggregate([
+            {
+                $match:
+                    {user_id: {$eq: new mongoose.Types.ObjectId(id)}}
+            },
+            {
+                $addFields: {
+                    comments: {$ifNull: ["$comments", []]}
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "comments.user_id",
+                    foreignField: "_id",
+                    as: "users"
+                }
+            },
+            {
+                $addFields: {
+                    comments: {
+                        $map: {
+                            input: "$comments",
+                            in: {
+                                $mergeObjects: [
+                                    "$$this",
+                                    {
+                                        user: {
+                                            $arrayElemAt: [
+                                                "$users",
+                                                {
+                                                    $indexOfArray: [
+                                                        "$users._id",
+                                                        "$$this.user_id"
+                                                    ]
+                                                }
+                                            ]
+                                        }
                                     }
-                                }
-                            ]
+                                ]
+                            }
                         }
                     }
                 }
+            },
+            {
+                $project: {
+                    users: 0,
+                    __v: 0,
+                    "comments.__v": 0,
+                    "comments.user_id": 0,
+                    "comments.user.location": 0,
+                    "comments.user.description": 0,
+                    "comments.user.occupation": 0,
+                    "comments.user.__v": 0
+                }
             }
-        },
-        {
-            $project: {
-                users: 0,
-                __v: 0,
-                "comments.__v": 0,
-                "comments.user_id": 0,
-                "comments.user.location": 0,
-                "comments.user.description": 0,
-                "comments.user.occupation": 0,
-                "comments.user.__v": 0
+        ], function (err, photos) {
+            if (err) {
+                console.error("Error in /photosOfUser/:id", err);
+                response.status(500)
+                    .send(JSON.stringify(err));
+                return;
             }
-        }
-    ], function (err, photos) {
-        if (err) {
-            console.error("Error in /photosOfUser/:id", err);
-            response.status(500)
-                .send(JSON.stringify(err));
-            return;
-        }
-        if (photos.length === 0) {
-            response.status(400)
-                .send();
-            return;
-        }
-        response.end(JSON.stringify(photos));
-    });
+            if (photos.length === 0) {
+                response.status(400)
+                    .send();
+                return;
+            }
+            response.end(JSON.stringify(photos));
+        });
+    } else {
+        response.status(401).send();
+    }
 });
 
 /**
  * URL /commentsOfUser/:id - Returns the Comments for User (id).
  */
 app.get("/commentsOfUser/:id", function (request, response) {
-    const id = request.params.id;
-    Photo.aggregate([
-        {
-            $unwind: "$comments",
-        },
-        {
-            $project: {
-                _id: "$comments._id",
-                user_id: "$comments.user_id",
-                photo_name: "$file_name",
-                date_time: "$comments.date_time",
-                text: "$comments.comment",
+    if (request.session.login_name) {
+        const id = request.params.id;
+        Photo.aggregate([
+            {
+                $unwind: "$comments",
             },
-        },
+            {
+                $project: {
+                    _id: "$comments._id",
+                    user_id: "$comments.user_id",
+                    photo_name: "$file_name",
+                    date_time: "$comments.date_time",
+                    text: "$comments.comment",
+                },
+            },
+            {
+                $match: {
+                    user_id: new mongoose.Types.ObjectId(id)
+                },
+            }
+        ], function (err, comments) {
+            if (err) {
+                console.error("Error in /commentsOfUser/:id", err);
+                response.status(500)
+                    .send(JSON.stringify(err));
+                return;
+            }
+            if (comments.length === 0) {
+                response.status(400)
+                    .send();
+                return;
+            }
+            response.end(JSON.stringify(comments));
+        });
+    } else {
+        response.status(401).send();
+    }
+});
+
+/**
+ * URL /admin/login - Creates User Session and Returns Username
+ */
+app.post("/admin/login", (request, response) => {
+    const login_name = request.body.login_name;
+
+    User.aggregate([
         {
             $match: {
-                user_id: new mongoose.Types.ObjectId(id)
-            },
+                login_name: login_name
+            }
         }
-    ], function (err, comments) {
-        if (err) {
-            console.error("Error in /commentsOfUser/:id", err);
-            response.status(500)
-                .send(JSON.stringify(err));
-            return;
+    ], function (err, users) {
+        const user = users[0];
+        if (user) {
+            request.session.login_name = login_name;
+
+            response.status(200).json({message: "Successful Login", user: user});
+        } else {
+            response.status(400).json({message: "Invalid Login Information"});
         }
-        if (comments.length === 0) {
-            response.status(400)
-                .send();
-            return;
-        }
-        response.end(JSON.stringify(comments));
     });
+});
+
+/**
+ * User /admin/logout - Clears Current Session
+ */
+app.post("/admin/logout", (request, response) => {
+    if (request.req.session.loggedInUser) {
+        request.req.session.destroy();
+    } else {
+        response.status(400);
+    }
 });
 
 const server = app.listen(3000, function () {

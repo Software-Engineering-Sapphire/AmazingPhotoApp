@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    AppBar, Toolbar, Typography, Checkbox, FormControlLabel
+    AppBar, Toolbar, Typography, Checkbox, FormControlLabel, Button
 } from '@mui/material';
 import './TopBar.css';
 import axios from 'axios';
@@ -40,7 +40,17 @@ class TopBar extends React.Component {
                 <Toolbar className="topbar-toolbar">
                     <Typography variant="h5" color="inherit">
                         {this.props.topBarStatus}
+                        {this.props.userIsLoggedIn &&
+                            (
+                                <Button variant="outlined" color="inherit" sx={{margin: "10px"}}
+                                    onClick = {() => {
+                                        this.props.logoutUser();
+                                    }}
+                                    >Logout
+                                </Button>
+                            )}
                     </Typography>
+
                     <FormControlLabel control={(
                         <Checkbox checked={this.props.advancedFeatures}
                                   onChange={this.handleCheckboxChange}

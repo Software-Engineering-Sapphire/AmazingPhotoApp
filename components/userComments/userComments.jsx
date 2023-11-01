@@ -8,7 +8,6 @@ class UserComments extends React.Component {
         super(props);
         this.state = {
             comments: null,
-            user: null
         };
     }
 
@@ -24,26 +23,11 @@ class UserComments extends React.Component {
             .catch((err) => {
                 console.error(err);
             });
-
-        axios.get('/user/' + this.props.match.params.userId)
-            .then(returnedObject => {
-                this.setState({user: returnedObject.data});
-                this.updateTopBarStatus();
-            })
-            .catch((err) => {
-                console.error(err);
-            });
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.match.params.userId !== prevProps.match.params.userId) {
             this.fetchDataFromAPI();
-        }
-    }
-
-    updateTopBarStatus() {
-        if (this.state.user !== null) {
-            this.props.updateTopBarStatus("Comments for " + this.state.user.first_name + " " + this.state.user.last_name);
         }
     }
 
