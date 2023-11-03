@@ -93,7 +93,7 @@ class LoginRegister extends React.Component {
                     <TextField
                         label="Enter first name"
                         onChange={(e) => this.setState({ firstName: e.target.value })}
-                        required
+
                         variant="outlined"
                         margin={'normal'}
                         value={this.state.firstName}
@@ -101,7 +101,7 @@ class LoginRegister extends React.Component {
                     <TextField
                         label="Enter last name"
                         onChange={(e) => this.setState({ lastName: e.target.value })}
-                        required
+
                         variant="outlined"
                         margin={'normal'}
                         value={this.state.lastName}
@@ -109,7 +109,7 @@ class LoginRegister extends React.Component {
                     <TextField
                         label="Enter address"
                         onChange={(e) => this.setState({ location: e.target.value })}
-                        required
+
                         variant="outlined"
                         margin={'normal'}
                         value={this.state.location}
@@ -117,7 +117,7 @@ class LoginRegister extends React.Component {
                     <TextField
                         label="Enter occupation"
                         onChange={(e) => this.setState({ occupation: e.target.value })}
-                        required
+
                         variant="outlined"
                         margin={'normal'}
                         value={this.state.occupation}
@@ -125,7 +125,7 @@ class LoginRegister extends React.Component {
                     <TextField
                         label="Enter description"
                         onChange={(e) => this.setState({ description: e.target.value })}
-                        required
+
                         variant="outlined"
                         margin={'normal'}
                         value={this.state.description}
@@ -141,7 +141,7 @@ class LoginRegister extends React.Component {
                     <Button
                         variant="outlined"
                         onClick={() => {
-                            this.registerUser(this.state.userName, this.description, this.state.password, this.state.lastName,this.state.firstName,this.state.location,this.state.occupation);
+                            this.registerUser(this.state.userName,  this.state.password, this.state.lastName,this.state.firstName,this.state.location,this.state.occupation,this.state.description);
                         }}
                     >
                         Register
