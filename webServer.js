@@ -340,12 +340,17 @@ app.get("/commentsOfUser/:id", function (request, response) {
  * URL /admin/login - Creates User Session and Returns Username
  */
 app.post("/admin/login", (request, response) => {
-    const login_name = request.body.login_name;
+    const {login_name,password} = request.body;
 
     User.aggregate([
         {
             $match: {
                 login_name: login_name
+            }
+        },
+        {
+            $match: {
+                password: password
             }
         }
     ], function (err, users) {
@@ -360,6 +365,7 @@ app.post("/admin/login", (request, response) => {
     });
 });
 
+
 /**
  * User /admin/logout - Clears Current Session
  */
@@ -369,6 +375,38 @@ app.post("/admin/logout", (request, response) => {
     } else {
         response.status(400);
     }
+});
+app.post("/admin/register", (request, response) => {
+    const { first_name,last_name,location,description, occupation, login_name, password } = request.body;
+    console.log(first_name);
+
+    // Check if the username already exists
+    User.findOne({ login_name }, (err, existingUser) => {
+        if (err) {
+            console.error("Error in /admin/register", err);
+            response.status(500).json({ message: "Registration failed" });
+            return;
+        }
+
+        if (existingUser) {
+            response.status(400).json({ message: "Username already exists" });
+        } else {
+            // Create a new user
+            const newUser = new User({ first_name,last_name,location,description, occupation, login_name, password});
+
+            newUser.save((err, user) => {
+                if (err) {
+                    console.error("Error in /admin/register", err);
+                    response.status(500).json({ message: "Registration failed" });
+                    return;
+                }
+
+                request.session.login_name = login_name;
+
+                response.status(200).json({ message: "Registration successful", user });
+            });
+        }
+    });
 });
 
 const server = app.listen(3000, function () {
