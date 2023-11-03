@@ -30,14 +30,17 @@ class TopBar extends React.Component {
         this.fetchDataFromAPI();
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.topBarStatus !== prevProps.topBarStatus) {
+            this.fetchDataFromAPI();
+        }
+    }
+
     handleCheckboxChange = (event) => {
         this.props.toggleAdvancedFeatures(event.target.checked);
     };
 
     render() {
-        if (!this.state.version) {
-            this.fetchDataFromAPI();
-        }
         return (
             <AppBar className="topbar-appBar" position="absolute">
                 <Toolbar className="topbar-toolbar">
