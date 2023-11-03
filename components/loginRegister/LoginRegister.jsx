@@ -141,7 +141,7 @@ class LoginRegister extends React.Component {
                     <Button
                         variant="outlined"
                         onClick={() => {
-                            this.registerUser(this.state.userName, this.state.password, this.state.lastName,this.state.firstName,this.state.location,this.state.occupation);
+                            this.registerUser(this.state.userName, this.description, this.state.password, this.state.lastName,this.state.firstName,this.state.location,this.state.occupation);
                         }}
                     >
                         Register
