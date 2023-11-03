@@ -53,8 +53,8 @@ class UserComments extends React.Component {
                     <Divider/>
                     {comments.map((comment, index) => {
                         return (
-                            <>
-                                <div key={index} className="comment-block">
+                            <div key={index} className="comment-block">
+                                <div className="comment-text-image">
                                     <img src={'../../images/'+comment.photo_name} alt="related to this comment"/>
                                     <div>
                                         <Typography variant="body1">
@@ -66,7 +66,7 @@ class UserComments extends React.Component {
                                     </div>
                                 </div>
                                 <Divider/>
-                            </>
+                            </div>
                         );
                     })}
                 </div>

@@ -35,7 +35,7 @@ class LoginRegister extends React.Component {
                     {this.state.invalidInput && <Alert severity="error">Invalid Login Attempt</Alert>}
                     <TextField
                         label="Username"
-                        onChange={e => this.setState({userName: e.target.value})}
+                        onChange={(e) => this.setState({userName: e.target.value})}
                         required
                         variant="outlined"
                         margin={"normal"}
