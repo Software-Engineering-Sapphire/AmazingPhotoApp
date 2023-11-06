@@ -16,6 +16,7 @@ class LoginRegister extends React.Component {
             description: '',
             occupation: '',// Add a confirmPassword field
             invalidInput: false,
+            errorMessage: 'Invalid input test'
         };
     }
 
@@ -50,11 +51,12 @@ class LoginRegister extends React.Component {
             .then((obj) => {
                 // Handle successful registration, you can redirect or show a success message here
                 // ...
-
+                console.log('hello');
                 this.setState({ invalidInput: false });
             })
             .catch((err) => {
-                this.setState({ invalidInput: true });
+
+                this.setState({ invalidInput: true, errorMessage: err.message });
                 console.log(err);
             });
     }
@@ -63,7 +65,7 @@ class LoginRegister extends React.Component {
         return (
             <Container>
                 <FormControl fullWidth>
-                    {this.state.invalidInput && <Alert severity="error">Invalid Input</Alert>}
+                    {this.state.invalidInput && <Alert severity="error">{this.state.errorMessage}</Alert>}
                     <TextField
                         label="Username"
                         onChange={(e) => this.setState({ userName: e.target.value })}

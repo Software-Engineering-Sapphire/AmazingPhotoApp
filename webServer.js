@@ -377,8 +377,21 @@ app.post("/admin/logout", (request, response) => {
     }
 });
 app.post("/admin/register", (request, response) => {
-    const { first_name,last_name,location,description, occupation, login_name, password } = request.body;
-    console.log(first_name);
+    const { first_name, last_name, location, description, occupation, login_name, password } = request.body;
+
+    // Check if any of the required fields are empty
+    if (!first_name) {
+        response.status(400).json({ message: "Please enter first name" });
+        return;
+    }
+    if (!last_name) {
+        response.status(400).json({ message: "Please enter last name" });
+        return;
+    }
+    if (!password) {
+        response.status(400).json({ message: "Please enter password" });
+        return;
+    }
 
     // Check if the username already exists
     User.findOne({ login_name }, (err, existingUser) => {
@@ -392,7 +405,15 @@ app.post("/admin/register", (request, response) => {
             response.status(400).json({ message: "Username already exists" });
         } else {
             // Create a new user
-            const newUser = new User({ first_name,last_name,location,description, occupation, login_name, password});
+            const newUser = new User({
+                first_name,
+                last_name,
+                location,
+                description,
+                occupation,
+                login_name,
+                password
+            });
 
             newUser.save((err, user) => {
                 if (err) {
@@ -408,6 +429,7 @@ app.post("/admin/register", (request, response) => {
         }
     });
 });
+
 
 const server = app.listen(3000, function () {
     const port = server.address().port;
