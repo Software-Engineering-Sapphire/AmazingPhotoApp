@@ -76,8 +76,12 @@ class TopBar extends React.Component {
                             <input type="file" accept="image/*" ref={(domFileRef) => { this.uploadInput = domFileRef; }} />
                         }
                     </Typography>
-                    <Typography>
+                    <Typography variant="h5" color="inherit">
+                        {this.props.userIsLoggedIn &&
+                            <Button variant="contained">Upload Photo
 
+                            </Button>
+                        }
                     </Typography>
 
                     <FormControlLabel control={(

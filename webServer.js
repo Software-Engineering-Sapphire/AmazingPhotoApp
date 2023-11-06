@@ -35,6 +35,7 @@
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const multer = require("multer");
+
 const processFormBody = multer({storage: multer.memoryStorage()}).single('uploadedphoto');
 const fs = require("fs");
 
@@ -412,3 +413,17 @@ const server = app.listen(3000, function () {
         __dirname
     );
 });
+
+handleUploadButtonClicked = (e) => {
+    e.preventDefault();
+    if (this.uploadInput.files.length > 0) {
+        // Create a DOM form and add the file to it under the name uploadedphoto
+        const domForm = new FormData();
+        domForm.append('uploadedphoto', this.uploadInput.files[0]);
+        axios.post('/photos/new', domForm)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch(err => console.log(`POST ERR: ${err}`));
+    }
+}
