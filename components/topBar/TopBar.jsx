@@ -40,6 +40,20 @@ class TopBar extends React.Component {
         this.props.toggleAdvancedFeatures(event.target.checked);
     };
 
+    handleUploadButtonClicked = (e) => {
+        e.preventDefault();
+        if (this.uploadInput.files.length > 0) {
+            // Create a DOM form and add the file to it under the name uploadedphoto
+            const domForm = new FormData();
+            domForm.append('uploadedphoto', this.uploadInput.files[0]);
+            axios.post('/photos/new', domForm)
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch(err => console.log(`POST ERR: ${err}`));
+        }
+    }
+
     render() {
         return (
             <AppBar className="topbar-appBar" position="absolute">
@@ -55,6 +69,15 @@ class TopBar extends React.Component {
                                     >Logout
                                 </Button>
                             )}
+                    </Typography>
+
+                    <Typography variant="h5" color='inherit'>
+                        {this.props.userIsLoggedIn &&
+                            <input type="file" accept="image/*" ref={(domFileRef) => { this.uploadInput = domFileRef; }} />
+                        }
+                    </Typography>
+                    <Typography>
+
                     </Typography>
 
                     <FormControlLabel control={(
