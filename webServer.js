@@ -49,6 +49,9 @@ const User = require("./schema/user.js");
 const Photo = require("./schema/photo.js");
 const SchemaInfo = require("./schema/schemaInfo.js");
 
+// Import password hashing functions
+const passwordFxns = require('./password');
+
 mongoose.set("strictQuery", false);
 mongoose.connect("mongodb://127.0.0.1/project6", {
     useNewUrlParser: true,
@@ -348,14 +351,14 @@ app.post("/admin/login", (request, response) => {
                 login_name: login_name
             }
         },
-        {
-            $match: {
-                password: password
-            }
-        }
+        // {
+        //     $match: {
+        //         password: password
+        //     }
+        // }
     ], function (err, users) {
         const user = users[0];
-        if (user) {
+        if (user && passwordFxns.doesPasswordMatch(user.password.hash, user.password.salt, password)) {
             request.session.login_name = login_name;
 
             response.status(200).json({message: "Successful Login", user: user});

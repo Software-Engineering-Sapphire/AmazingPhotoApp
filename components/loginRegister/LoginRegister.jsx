@@ -2,6 +2,7 @@ import React from 'react';
 import './LoginRegister.css';
 import { Alert, Button, Container, FormControl, TextField } from '@mui/material';
 import axios from 'axios';
+import {makePasswordEntry} from "../../password";
 
 class LoginRegister extends React.Component {
     constructor(props) {
@@ -43,7 +44,7 @@ class LoginRegister extends React.Component {
         }
 
         axios
-            .post('/admin/register', JSON.stringify({ login_name: userName, password: password, first_name: firstName, last_name: lastName, location: location, occupation: occupation, description: description}), {
+            .post('/admin/register', JSON.stringify({ login_name: userName, password: makePasswordEntry(password), first_name: firstName, last_name: lastName, location: location, occupation: occupation, description: description}), {
                 headers: {
                     'Content-Type': 'application/json',
                 },
