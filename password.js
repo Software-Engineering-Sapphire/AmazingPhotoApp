@@ -9,6 +9,9 @@ const { createHash, randomBytes } = require('crypto-browserify');
  *    hash - The sha1 hash of the password and salt.
  */
 function makePasswordEntry(clearTextPassword) {
+    if (clearTextPassword === null || clearTextPassword === undefined || clearTextPassword === "") {
+        return "invalid password";
+    }
     let retObj = {};
     const hasher = createHash('sha1');
     retObj.salt = randomBytes(8).toString('hex');
