@@ -9,7 +9,6 @@ const { createHash, randomBytes } = require('crypto-browserify');
  *    hash - The sha1 hash of the password and salt.
  */
 function makePasswordEntry(clearTextPassword) {
-    console.log("makePasswordEntry run with password "+clearTextPassword);
     let retObj = {};
     const hasher = createHash('sha1');
     retObj.salt = randomBytes(8).toString('hex');
@@ -27,7 +26,6 @@ function makePasswordEntry(clearTextPassword) {
  * @return {boolean}
  */
 function doesPasswordMatch(hash, salt, clearTextPassword) {
-    console.log(`doesPasswordMatch run with hash ${hash}, salt ${salt}, and password ${clearTextPassword}`);
     const hasher = createHash('sha1');
     hasher.update(clearTextPassword + salt);
     const calculatedHash = hasher.digest('hex');
