@@ -195,7 +195,14 @@ app.get("/user/list", function (request, response) {
 app.get("/user/:id", function (request, response) {
     if (request.session.login_name) {
         const id = request.params.id;
-        User.find({_id: {$eq: id}}, {__v: 0}, function (err, user) {
+        let mongoTargetObj;
+        try {
+            mongoTargetObj = new mongoose.Types.ObjectId(id);
+        } catch (e) {
+            response.status(400).send();
+        }
+
+        User.find({_id: {$eq: mongoTargetObj}}, {__v: 0}, function (err, user) {
             if (err) {
                 console.error("Error in /user/:id", err);
                 response.status(500)
@@ -220,10 +227,17 @@ app.get("/user/:id", function (request, response) {
 app.get("/photosOfUser/:id", function (request, response) {
     if (request.session.login_name) {
         const id = request.params.id;
+        let mongoTargetObj;
+        try {
+            mongoTargetObj = new mongoose.Types.ObjectId(id);
+        } catch (e) {
+            response.status(400).send();
+        }
+
         Photo.aggregate([
             {
                 $match:
-                    {user_id: {$eq: new mongoose.Types.ObjectId(id)}}
+                    {user_id: {$eq: mongoTargetObj}}
             },
             {
                 $addFields: {
@@ -302,6 +316,13 @@ app.get("/photosOfUser/:id", function (request, response) {
 app.get("/commentsOfUser/:id", function (request, response) {
     if (request.session.login_name) {
         const id = request.params.id;
+        let mongoTargetObj;
+        try {
+            mongoTargetObj = new mongoose.Types.ObjectId(id);
+        } catch (e) {
+            response.status(400).send();
+        }
+
         Photo.aggregate([
             {
                 $unwind: "$comments",
@@ -317,7 +338,7 @@ app.get("/commentsOfUser/:id", function (request, response) {
             },
             {
                 $match: {
-                    user_id: new mongoose.Types.ObjectId(id)
+                    user_id: mongoTargetObj
                 },
             }
         ], function (err, comments) {
