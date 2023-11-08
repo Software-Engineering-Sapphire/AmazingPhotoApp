@@ -17,7 +17,7 @@ class LoginRegister extends React.Component {
             description: '',
             occupation: '',// Add a confirmPassword field
             invalidInput: false,
-            errorMessage: 'Invalid input test'
+            errorMessage: 'Invalid Input'
         };
     }
 
@@ -32,14 +32,14 @@ class LoginRegister extends React.Component {
                 this.props.history.push('/users/' + this.state.loggedInUser._id);
                 this.setState({invalidInput : false});
             }).catch((err) => {
-            this.setState({invalidInput : true});
-            console.log(err);
+                this.setState({invalidInput : true, errorMessage: err.response.data.message });
+                console.log(err);
         });
     }
 
     registerUser(userName, password, firstName, lastName, location, occupation, description) {
         if (password !== this.state.confirmPassword) {
-            this.setState({ invalidInput: true });
+            this.setState({ invalidInput: true , errorMessage: "Password and Confirm Password Do Not Match"});
             return;
         }
 
@@ -50,14 +50,12 @@ class LoginRegister extends React.Component {
                 },
             })
             .then((obj) => {
-                // Handle successful registration, you can redirect or show a success message here
-                // ...
-                console.log('hello');
                 this.setState({ invalidInput: false });
+                this.loginUser(obj.data.user.login_name, this.state.password);
             })
             .catch((err) => {
 
-                this.setState({ invalidInput: true, errorMessage: err.message });
+                this.setState({ invalidInput: true, errorMessage: err.response.data.message });
                 console.log(err);
             });
     }
@@ -144,7 +142,7 @@ class LoginRegister extends React.Component {
                     <Button
                         variant="outlined"
                         onClick={() => {
-                            this.registerUser(this.state.userName,  this.state.password, this.state.lastName,this.state.firstName,this.state.location,this.state.occupation,this.state.description);
+                            this.registerUser(this.state.userName,  this.state.password, this.state.firstName, this.state.lastName,this.state.location,this.state.occupation,this.state.description);
                         }}
                     >
                         Register

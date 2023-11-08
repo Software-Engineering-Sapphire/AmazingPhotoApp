@@ -344,7 +344,6 @@ app.get("/commentsOfUser/:id", function (request, response) {
  */
 app.post("/admin/login", (request, response) => {
     const {login_name,password} = request.body;
-
     User.aggregate([
         {
             $match: {
@@ -381,18 +380,21 @@ app.post("/admin/logout", (request, response) => {
 });
 app.post("/admin/register", (request, response) => {
     const { first_name, last_name, location, description, occupation, login_name, password } = request.body;
-
     // Check if any of the required fields are empty
+    if (!login_name) {
+        response.status(400).json({ message: "Please enter username" });
+        return;
+    }
+    if (!password || password === 'invalid password') {
+        response.status(400).json({ message: "Please enter password" });
+        return;
+    }
     if (!first_name) {
         response.status(400).json({ message: "Please enter first name" });
         return;
     }
     if (!last_name) {
-        response.status(400).json({ message: "Please enter last name" });
-        return;
-    }
-    if (!password) {
-        response.status(400).json({ message: "Please enter password" });
+        response.status(400).json({message: "Please enter last name"});
         return;
     }
 
