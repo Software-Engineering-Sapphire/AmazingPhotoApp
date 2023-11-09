@@ -40,6 +40,11 @@ class TopBar extends React.Component {
         this.props.toggleAdvancedFeatures(event.target.checked);
     };
 
+    handleFileChange = (event) => {
+        const file = event.target.files[0];
+        this.setState({ selectedFile: file });
+    };
+
     handleUploadButtonClicked = (e) => {
         e.preventDefault();
         if (this.uploadInput.files.length > 0) {
@@ -53,6 +58,16 @@ class TopBar extends React.Component {
                 .catch(err => console.log(`POST ERR: ${err}`));
         }
     }
+    handleUploadPhoto = () => {
+        const { selectedFile } = this.state;
+        if (selectedFile) {
+            console.log('Selected file:', selectedFile);
+
+        } else {
+            alert('Please select a file first.');
+        }
+    };
+
 
     render() {
         return (
@@ -73,13 +88,17 @@ class TopBar extends React.Component {
 
                     <Typography variant="h5" color='inherit'>
                         {this.props.userIsLoggedIn &&
-                            <input type="file" accept="image/*" ref={(domFileRef) => { this.uploadInput = domFileRef; }} />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                ref={(domFileRef) => { this.uploadInput = domFileRef; }}
+                                onChange={this.handleFileChange}
+                            />
                         }
                     </Typography>
                     <Typography variant="h5" color="inherit">
                         {this.props.userIsLoggedIn &&
-                            <Button variant="contained">Upload Photo
-
+                            <Button variant="contained" onClick={this.handleUploadPhoto}>Upload Photo
                             </Button>
                         }
                     </Typography>
