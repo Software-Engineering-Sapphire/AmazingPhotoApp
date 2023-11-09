@@ -12,7 +12,8 @@ class TopBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            version: undefined
+            version: undefined,
+            uploadInput: undefined
         };
     }
 
@@ -42,7 +43,7 @@ class TopBar extends React.Component {
 
     handleFileChange = (event) => {
         const file = event.target.files[0];
-        this.setState({ selectedFile: file });
+        this.setState({ uploadInput: file });
     };
 
     handleUploadButtonClicked = (e) => {
@@ -58,17 +59,6 @@ class TopBar extends React.Component {
                 .catch(err => console.log(`POST ERR: ${err}`));
         }
     }
-    handleUploadPhoto = () => {
-        const { selectedFile } = this.state;
-        if (selectedFile) {
-            console.log('Selected file:', selectedFile);
-
-        } else {
-            alert('Please select a file first.');
-        }
-    };
-
-
     render() {
         return (
             <AppBar className="topbar-appBar" position="absolute">
@@ -98,7 +88,7 @@ class TopBar extends React.Component {
                     </Typography>
                     <Typography variant="h5" color="inherit">
                         {this.props.userIsLoggedIn &&
-                            <Button variant="contained" onClick={this.handleUploadPhoto}>Upload Photo
+                            <Button variant="contained" onClick={this.handleUploadButtonClicked}>Upload Photo
                             </Button>
                         }
                     </Typography>
