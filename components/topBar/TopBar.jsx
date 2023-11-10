@@ -55,10 +55,11 @@ class TopBar extends React.Component {
             axios.post('/photos/new', domForm)
                 .then((res) => {
                     console.log(res);
+                    this.fetchDataFromAPI();
                 })
                 .catch(err => console.log(`POST ERR: ${err}`));
         }
-    }
+    };
     render() {
         return (
             <AppBar className="topbar-appBar" position="absolute">
@@ -77,20 +78,20 @@ class TopBar extends React.Component {
                     </Typography>
 
                     <Typography variant="h5" color='inherit'>
-                        {this.props.userIsLoggedIn &&
+                        {this.props.userIsLoggedIn && (
                             <input
                                 type="file"
                                 accept="image/*"
                                 ref={(domFileRef) => { this.uploadInput = domFileRef; }}
                                 onChange={this.handleFileChange}
                             />
-                        }
+                        )}
                     </Typography>
                     <Typography variant="h5" color="inherit">
-                        {this.props.userIsLoggedIn &&
+                        {this.props.userIsLoggedIn && (
                             <Button variant="contained" onClick={this.handleUploadButtonClicked}>Upload Photo
                             </Button>
-                        }
+                        )}
                     </Typography>
 
                     <FormControlLabel control={(
