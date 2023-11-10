@@ -36,6 +36,9 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 
+const processFormBody = multer({storage: multer.memoryStorage()}).single('uploadedphoto');
+const fs = require("fs");
+
 const mongoose = require("mongoose");
 mongoose.Promise = require("bluebird");
 
@@ -404,6 +407,52 @@ app.post('/commentsOfPhoto/:photo_id', function (request, response) {
 )
 
 
+app.post("/photos/new", (request, response) => {
+    if (request.session.login_name){
+
+        processFormBody(request, response, function (err) {
+        if (err || !request.file) {
+            response.status (400)
+                .send(JSON.stringify(err));
+            return;
+        }
+
+        // request.file has the following properties of interest:
+        //   fieldname    - Should be 'uploadedphoto' since that is what we sent
+        //   originalname - The name of the file the user uploaded
+        //   mimetype     - The mimetype of the image (e.g., 'image/jpeg',
+        //                  'image/png')
+        //   buffer       - A node Buffer containing the contents of the file
+        //   size         - The size of the file in bytes
+        console.log(request.file.fieldname);
+        // We need to create the file in the directory "images" under an unique name.
+        // We make the original file name unique by adding a unique prefix with a
+        // timestamp.
+        const timestamp = new Date().valueOf();
+        const filename = 'U' +  String(timestamp) + request.file.originalname;
+
+        fs.writeFile("./images/" + filename, request.file.buffer, function (err) {
+            // XXX - Once you have the file written into your images directory under the
+            // name filename you can create the Photo object in the database
+        const newPhoto = new Photo({
+            file_name: request.file.originalname,
+            date_time: timestamp,
+            user_id: "654d33a8e4e18c9deccb245b"
+
+        })
+            newPhoto.save((err, photo)=> {
+                if (err){
+                    console.error("Error in /photos/new", err);
+                    response.status(400).json({message: "Photo Upload Failed"});
+                    return;
+                }
+                response.status(200).json({message: "Photo Upload Success"})
+                }
+
+            )
+        });
+    });}
+});
 
 const server = app.listen(3000, function () {
     const port = server.address().port;
@@ -414,3 +463,4 @@ const server = app.listen(3000, function () {
         __dirname
     );
 });
+
