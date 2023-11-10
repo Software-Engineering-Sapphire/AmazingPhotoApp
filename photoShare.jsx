@@ -82,7 +82,7 @@ class PhotoShare extends React.Component {
                                                 <Redirect to={"/login-register"}/>
                                         )}/>
 
-                                    {/* :userId is a placeholder for a user ID. userId is passed as props to the UserDetail component. */}
+                                    {/*userId is a placeholder for a user ID. userId is passed as props to the UserDetail component. */}
                                     <Route path="/users/:userId"
                                            render={props => (
                                                userIsLoggedIn ?

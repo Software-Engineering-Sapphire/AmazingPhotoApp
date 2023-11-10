@@ -114,7 +114,7 @@ app.get("/test/:p1", function (request, response) {
             });
         } else if (param === "counts") {
             // In order to return the counts of all the collections we need to do an
-            // async call to each collections. That is tricky to do so we use the async
+            // async call to each collection. That is tricky to do so we use the async
             // package do the work. We put the collections into array and use async.each
             // to do each .count() query.
             const collections = [
@@ -522,7 +522,7 @@ app.post("/photos/new", (request, response) => {
         //   buffer       - A node Buffer containing the contents of the file
         //   size         - The size of the file in bytes
         console.log(request.file.fieldname);
-        // We need to create the file in the directory "images" under an unique name.
+        // We need to create the file in the directory "images" under a unique name.
         // We make the original file name unique by adding a unique prefix with a
         // timestamp.
         const timestamp = new Date().valueOf();
