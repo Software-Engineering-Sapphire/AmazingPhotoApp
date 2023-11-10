@@ -96,5 +96,6 @@ class UserPhotos extends React.Component {
             );
         }
     }
+}
 
-export default userPhotos;
+export default UserPhotos;
