@@ -47,11 +47,12 @@ class TopBar extends React.Component {
     };
 
     handleUploadButtonClicked = (e) => {
+        document.getElementById('fileUploader').value = '';
         e.preventDefault();
-        if (this.state.uploadInput.files.length > 0) {
+        if (this.state.uploadInput) {
             // Create a DOM form and add the file to it under the name uploadedphoto
             const domForm = new FormData();
-            domForm.append('uploadedphoto', this.state.uploadInput.files[0]);
+            domForm.append('uploadedphoto', this.state.uploadInput);
             axios.post('/photos/new', domForm)
                 .then((res) => {
                     console.log(res);
@@ -80,9 +81,9 @@ class TopBar extends React.Component {
                     <Typography variant="h5" color='inherit'>
                         {this.props.userIsLoggedIn && (
                             <input
+                                id={'fileUploader'}
                                 type="file"
                                 accept="image/*"
-                                ref={(domFileRef) => { this.setState({uploadInput:domFileRef}); }}
                                 onChange={this.handleFileChange}
                             />
                         )}
