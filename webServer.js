@@ -216,7 +216,15 @@ app.get("/user/:id", function (request, response) {
                     .send();
                 return;
             }
-            response.end(JSON.stringify(user[0]));
+            const userDTO = {
+                _id: user[0]._id,
+                first_name: user[0].first_name,
+                last_name: user[0].last_name,
+                location: user[0].location,
+                description: user[0].description,
+                occupation: user[0].occupation
+            }
+            response.end(JSON.stringify(userDTO));
         });
     } else {
         response.status(401).send();
@@ -395,7 +403,7 @@ app.post("/admin/login", (request, response) => {
  * User /admin/logout - Clears Current Session
  */
 app.post("/admin/logout", (request, response) => {
-    if (request.req.session.loggedInUser) {
+    if (request.session.loggedInUser) {
         request.req.session.destroy();
     } else {
         response.status(400);
