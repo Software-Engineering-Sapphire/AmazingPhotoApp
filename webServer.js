@@ -371,6 +371,40 @@ app.post("/admin/logout", (request, response) => {
     }
 });
 
+app.post('/commentsOfPhoto/:photo_id', function (request, response) {
+    console.log(request.params.photo_id)
+    if (request.session.login_name) {
+        const timestamp = new Date().valueOf();
+        const id = new mongoose.Types.ObjectId(request.params.photo_id);
+        const commentInput = request.body.comment;
+        const commentBody = {
+            comment: commentInput,
+            date_time: timestamp,
+            user_id: "654d33a8e4e18c9deccb245b"
+
+        }
+        Photo.findById({
+            _id: id
+        }).then(
+            photo => {
+                photo.comments = photo.comments.concat(commentBody)
+
+                photo.save((err, comment)=> {
+                    if (err){
+                        console.error('/commentsOfPhoto/:photoId', err);
+                        response.status(400).json({message: "Comment Upload Failed"});
+                        return;
+                    }
+                    response.status(200).json({message: "Comment Upload Success"});
+                })
+            }
+        )
+    }
+}
+)
+
+
+
 const server = app.listen(3000, function () {
     const port = server.address().port;
     console.log(
