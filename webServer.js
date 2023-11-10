@@ -460,17 +460,6 @@ app.post("/admin/register", (request, response) => {
     });
 });
 
-/**
- * User /admin/logout - Clears Current Session
- */
-app.post("/admin/logout", (request, response) => {
-    if (request.req.session.loggedInUser) {
-        request.req.session.destroy();
-    } else {
-        response.status(400);
-    }
-});
-
 app.post('/commentsOfPhoto/:photo_id', function (request, response) {
     console.log(request.params.photo_id)
     if (request.session.login_name) {
@@ -532,7 +521,7 @@ app.post("/photos/new", (request, response) => {
             // XXX - Once you have the file written into your images directory under the
             // name filename you can create the Photo object in the database
         const newPhoto = new Photo({
-            file_name: request.file.originalname,
+            file_name: filename,
             date_time: timestamp,
             user_id: request.session.user_id
 
