@@ -12,7 +12,8 @@ class TopBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            version: undefined
+            version: undefined,
+            uploadInput: undefined
         };
     }
 
@@ -40,6 +41,24 @@ class TopBar extends React.Component {
         this.props.toggleAdvancedFeatures(event.target.checked);
     };
 
+    handleFileChange = (event) => {
+        const file = event.target.files[0];
+        this.setState({ uploadInput: file });
+    };
+
+    handleUploadButtonClicked = (e) => {
+        e.preventDefault();
+        if (this.uploadInput.files.length > 0) {
+            // Create a DOM form and add the file to it under the name uploadedphoto
+            const domForm = new FormData();
+            domForm.append('uploadedphoto', this.uploadInput.files[0]);
+            axios.post('/photos/new', domForm)
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch(err => console.log(`POST ERR: ${err}`));
+        }
+    }
     render() {
         return (
             <AppBar className="topbar-appBar" position="absolute">
@@ -55,6 +74,23 @@ class TopBar extends React.Component {
                                     >Logout
                                 </Button>
                             )}
+                    </Typography>
+
+                    <Typography variant="h5" color='inherit'>
+                        {this.props.userIsLoggedIn &&
+                            <input
+                                type="file"
+                                accept="image/*"
+                                ref={(domFileRef) => { this.uploadInput = domFileRef; }}
+                                onChange={this.handleFileChange}
+                            />
+                        }
+                    </Typography>
+                    <Typography variant="h5" color="inherit">
+                        {this.props.userIsLoggedIn &&
+                            <Button variant="contained" onClick={this.handleUploadButtonClicked}>Upload Photo
+                            </Button>
+                        }
                     </Typography>
 
                     <FormControlLabel control={(

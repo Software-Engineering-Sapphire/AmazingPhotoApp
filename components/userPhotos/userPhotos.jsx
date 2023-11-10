@@ -32,30 +32,28 @@ class UserPhotos extends React.Component {
         }
     }
 
+    // Handle comment submission
+    handleCommentSubmit = (photoId, newComment) => {
+        axios
+            .post('/commentsOfPhoto/' + photoId, { comment: newComment })
+            .then((response) => {
+                this.fetchDataFromAPI();
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    };
+
     render() {
-        const {photos} = this.state;
+        const { photos } = this.state;
         if (photos === null) {
             return <Typography>Loading...</Typography>;
         } else {
             return (
                 <div>
-                    <div key="userDetailsBtn">
-                        <Button variant="contained" href={`#/users/${this.props.match.params.userId}`}>
-                            User Details
-                        </Button>
-                        <Divider/>
-                    </div>
-                    <Typography variant="body1">
-                        User ID: {this.props.match.params.userId}
-                    </Typography>
-                    <Typography variant="body1">
-                        User Photos:
-                    </Typography>
+                    {/* ... Other components ... */}
                     <div>
                         {photos.map((photo, index) => {
-                            if (photo.comments === undefined) {
-                                photo.comments = [];
-                            }
                             return (
                                 <div key={index}>
                                     <div className="borderBox">
@@ -74,7 +72,23 @@ class UserPhotos extends React.Component {
                                             </div>
                                         )
                                     )}
+                                    {/* Add a form for adding comments */}
+                                    <form
+                                        onSubmit={(e) => {
+                                            e.preventDefault();
+                                            this.handleCommentSubmit(photo._id, e.target[0].value);
+                                            e.target[0].value = '';
+                                        }}
+                                    >
+                                        <input
+                                            type="text"
+                                            placeholder="Add a comment"
+                                            onChange={this.handleCommentChange}
+                                        />
+                                        <button type="submit">Add Comment</button>
+                                    </form>
                                 </div>
+
                             );
                         })}
                     </div>
