@@ -382,7 +382,7 @@ app.post("/admin/login", (request, response) => {
         const user = users[0];
         if (user && passwordFxns.doesPasswordMatch(user.password.hash, user.password.salt, password)) {
             request.session.login_name = login_name;
-
+            request.session.user_id = user._id;
             response.status(200).json({message: "Successful Login", user: user});
         } else {
             response.status(400).json({message: "Invalid Login Information"});
@@ -480,7 +480,7 @@ app.post('/commentsOfPhoto/:photo_id', function (request, response) {
         const commentBody = {
             comment: commentInput,
             date_time: timestamp,
-            user_id: "654d33a8e4e18c9deccb245b"
+            user_id: request.session.user_id
 
         }
         Photo.findById({
@@ -534,7 +534,7 @@ app.post("/photos/new", (request, response) => {
         const newPhoto = new Photo({
             file_name: request.file.originalname,
             date_time: timestamp,
-            user_id: "654d33a8e4e18c9deccb245b"
+            user_id: request.session.user_id
 
         })
             newPhoto.save((err, photo)=> {
