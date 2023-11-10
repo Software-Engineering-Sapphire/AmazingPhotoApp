@@ -114,7 +114,7 @@ app.get("/test/:p1", function (request, response) {
             });
         } else if (param === "counts") {
             // In order to return the counts of all the collections we need to do an
-            // async call to each collections. That is tricky to do so we use the async
+            // async call to each collection. That is tricky to do so we use the async
             // package do the work. We put the collections into array and use async.each
             // to do each .count() query.
             const collections = [
@@ -382,7 +382,7 @@ app.post("/admin/login", (request, response) => {
         const user = users[0];
         if (user && passwordFxns.doesPasswordMatch(user.password.hash, user.password.salt, password)) {
             request.session.login_name = login_name;
-
+            request.session.user_id = user._id;
             response.status(200).json({message: "Successful Login", user: user});
         } else {
             response.status(400).json({message: "Invalid Login Information"});
@@ -460,17 +460,6 @@ app.post("/admin/register", (request, response) => {
     });
 });
 
-/**
- * User /admin/logout - Clears Current Session
- */
-app.post("/admin/logout", (request, response) => {
-    if (request.req.session.loggedInUser) {
-        request.req.session.destroy();
-    } else {
-        response.status(400);
-    }
-});
-
 app.post('/commentsOfPhoto/:photo_id', function (request, response) {
     console.log(request.params.photo_id)
     if (request.session.login_name) {
@@ -480,7 +469,7 @@ app.post('/commentsOfPhoto/:photo_id', function (request, response) {
         const commentBody = {
             comment: commentInput,
             date_time: timestamp,
-            user_id: "654d33a8e4e18c9deccb245b"
+            user_id: request.session.user_id
 
         }
         Photo.findById({
@@ -522,7 +511,7 @@ app.post("/photos/new", (request, response) => {
         //   buffer       - A node Buffer containing the contents of the file
         //   size         - The size of the file in bytes
         console.log(request.file.fieldname);
-        // We need to create the file in the directory "images" under an unique name.
+        // We need to create the file in the directory "images" under a unique name.
         // We make the original file name unique by adding a unique prefix with a
         // timestamp.
         const timestamp = new Date().valueOf();
@@ -532,9 +521,9 @@ app.post("/photos/new", (request, response) => {
             // XXX - Once you have the file written into your images directory under the
             // name filename you can create the Photo object in the database
         const newPhoto = new Photo({
-            file_name: request.file.originalname,
+            file_name: filename,
             date_time: timestamp,
-            user_id: "654d33a8e4e18c9deccb245b"
+            user_id: request.session.user_id
 
         })
             newPhoto.save((err, photo)=> {

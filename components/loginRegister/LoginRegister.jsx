@@ -93,7 +93,6 @@ class LoginRegister extends React.Component {
                     <TextField
                         label="Enter first name"
                         onChange={(e) => this.setState({ firstName: e.target.value })}
-
                         variant="outlined"
                         margin={'normal'}
                         value={this.state.firstName}
@@ -101,7 +100,6 @@ class LoginRegister extends React.Component {
                     <TextField
                         label="Enter last name"
                         onChange={(e) => this.setState({ lastName: e.target.value })}
-
                         variant="outlined"
                         margin={'normal'}
                         value={this.state.lastName}
@@ -109,7 +107,6 @@ class LoginRegister extends React.Component {
                     <TextField
                         label="Enter address"
                         onChange={(e) => this.setState({ location: e.target.value })}
-
                         variant="outlined"
                         margin={'normal'}
                         value={this.state.location}
@@ -117,7 +114,6 @@ class LoginRegister extends React.Component {
                     <TextField
                         label="Enter occupation"
                         onChange={(e) => this.setState({ occupation: e.target.value })}
-
                         variant="outlined"
                         margin={'normal'}
                         value={this.state.occupation}
@@ -125,7 +121,6 @@ class LoginRegister extends React.Component {
                     <TextField
                         label="Enter description"
                         onChange={(e) => this.setState({ description: e.target.value })}
-
                         variant="outlined"
                         margin={'normal'}
                         value={this.state.description}

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Divider, Typography} from '@mui/material';
+import {Typography} from '@mui/material';
 import './userPhotos.css';
 import {Link} from "react-router-dom";
 import axios from 'axios';
@@ -36,7 +36,7 @@ class UserPhotos extends React.Component {
     handleCommentSubmit = (photoId, newComment) => {
         axios
             .post('/commentsOfPhoto/' + photoId, {comment: newComment})
-            .then((response) => {
+            .then(() => {
                 this.fetchDataFromAPI();
             })
             .catch((err) => {

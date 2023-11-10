@@ -7,6 +7,8 @@
   ],
   "parser": "@babel/eslint-parser",
   "rules": {
+    "import/no-unresolved": [2, {"caseSensitive": false}],
+
     // CS rules
     "no-console": 0,
     "react/prop-types": "off",
