@@ -1,5 +1,7 @@
 # AmazingPhotoApp - Sapphire
 
+**NOTE TO PROF/TA:** Include userComments.jsx and userComments.css!
+
 ## Project Roles
 
 ### Scrum Master

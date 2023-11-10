@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, Divider, Typography} from '@mui/material';
 import './userDetail.css';
-import fetchModel from "../../lib/fetchModelData";
+import axios from 'axios';
 
 class UserDetail extends React.Component {
     constructor(props) {
@@ -9,7 +9,6 @@ class UserDetail extends React.Component {
         this.state = {
             user: null
         };
-        this.updateTopBarStatus();
     }
 
     componentDidMount() {
@@ -17,26 +16,20 @@ class UserDetail extends React.Component {
     }
 
     fetchDataFromAPI() {
-        fetchModel('/user/' + this.props.match.params.userId)
+        axios.get('/user/' + this.props.match.params.userId)
             .then(returnedObject => {
-                this.setState({ user:returnedObject.data});
-                this.updateTopBarStatus();
+                this.setState({user: returnedObject.data});
+            })
+            .catch((err) => {
+                console.error(err);
             });
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.match.params.userId !== prevProps.match.params.userId) {
             this.fetchDataFromAPI();
-            this.updateTopBarStatus();
         }
     }
-
-    updateTopBarStatus() {
-        if (this.state.user !== null) {
-            this.props.updateTopBarStatus(this.state.user.first_name + " " + this.state.user.last_name);
-        }
-    }
-
     render() {
         if (this.state.user === null) {
             return <Typography>Loading...</Typography>;

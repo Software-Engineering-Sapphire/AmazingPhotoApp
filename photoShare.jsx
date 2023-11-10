@@ -4,29 +4,44 @@ import {
     HashRouter, Route, Switch
 } from 'react-router-dom';
 import {
-    Grid, Paper
+    Grid, Paper,
 } from '@mui/material';
 import './styles/main.css';
+
+import {Redirect} from "react-router";
 
 // import necessary components
 import TopBar from './components/topBar/TopBar';
 import UserDetail from './components/userDetail/userDetail';
 import UserList from './components/userList/userList';
 import UserPhotos from './components/userPhotos/userPhotos';
+import UserComments from './components/userComments/userComments';
+import LoginRegister from "./components/loginRegister/LoginRegister";
 
 class PhotoShare extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            topBarStatus: "",
+            topBarStatus: "Please Login",
             advancedFeatures: false,
+            userIsLoggedIn: false
         };
-        this.updateTopBarStatus = this.updateTopBarStatus.bind(this);
         this.toggleAdvancedFeatures = this.toggleAdvancedFeatures.bind(this);
+        this.updateLoggedInUser = this.updateLoggedInUser.bind(this);
     }
 
-    updateTopBarStatus = (updatedStatus) => {
-        this.setState({topBarStatus: updatedStatus});
+    toggleAdvancedFeatures = (advancedFeaturesBool) => {
+        this.setState({advancedFeatures: advancedFeaturesBool});
+    };
+
+    updateLoggedInUser = (user = null) => {
+        if (user == null) {
+            this.setState({userIsLoggedIn: false});
+            this.setState({topBarStatus: "Please Login"});
+        } else {
+            this.setState({userIsLoggedIn: true});
+            this.setState({topBarStatus: "Hi, " + user.first_name});
+        }
     };
 
     toggleAdvancedFeatures = (advancedFeaturesBool) => {
@@ -34,6 +49,7 @@ class PhotoShare extends React.Component {
     }
 
     render() {
+        const userIsLoggedIn = this.state.userIsLoggedIn;
         return (
             <HashRouter>
                 <div>
@@ -42,34 +58,62 @@ class PhotoShare extends React.Component {
                             <TopBar topBarStatus={this.state.topBarStatus}
                                     advancedFeatures={this.state.advancedFeatures}
                                     toggleAdvancedFeatures={this.toggleAdvancedFeatures}
+                                    userIsLoggedIn={this.state.userIsLoggedIn}
+                                    logoutUser={this.updateLoggedInUser}
                             />
                         </Grid>
                         <div className="main-topbar-buffer"/>
                         <Grid item sm={3}>
                             <Paper className="main-grid-item">
-                                <UserList/>
+                                {userIsLoggedIn && <UserList advancedFeatures={this.state.advancedFeatures}/>}
                             </Paper>
                         </Grid>
                         <Grid item sm={9}>
                             <Paper className="main-grid-item">
                                 <Switch>
-                                    <Route exact path="/"/>
+                                    (<Route path="/login-register"
+                                               render={props => (
+                                                   <LoginRegister {...props}
+                                                    updateLoggedInUser={this.updateLoggedInUser}/>
+                                               )}/>
+                                    )
+
+                                    <Route exact path="/"
+                                        render={() => (
+                                            userIsLoggedIn ?
+                                                <div></div>
+                                                :
+                                                <Redirect to={"/login-register"}/>
+                                        )}/>
+
                                     {/* :userId is a placeholder for a user ID. userId is passed as props to the UserDetail component. */}
                                     <Route path="/users/:userId"
                                            render={props => (
-                                               <UserDetail {...props}
-                                                           updateTopBarStatus={this.updateTopBarStatus}/>
+                                               userIsLoggedIn ?
+                                               <UserDetail {...props}/> :
+                                               <Redirect to={"/login-register"}/>
                                            )}
                                     />
                                     <Route path="/photos/:userId"
-                                           render={props => (
-                                               <UserPhotos {...props}
-                                                           updateTopBarStatus={this.updateTopBarStatus}
-                                                           advancedFeatures={this.state.advancedFeatures}
-                                               />
+                                           render={props => (userIsLoggedIn ?
+                                                   (
+                                                       <UserPhotos {...props}
+                                                           advancedFeatures={this.state.advancedFeatures}/>
+                                                   ) :
+                                                   <Redirect to={"/login-register"}/>
+                                           )}/>
+                                    <Route path="/comments/:userId"
+                                           render={props => (userIsLoggedIn ?
+                                                   (
+                                                       <UserComments {...props}
+                                                             advancedFeatures={this.state.advancedFeatures}/>
+                                                   ) :
+                                                   <Redirect to={"/login-register"}/>
                                            )}
                                     />
                                     <Route path="/users" component={UserList}/>
+
+                                    <Redirect from='*' to='/' />
                                 </Switch>
                             </Paper>
                         </Grid>
