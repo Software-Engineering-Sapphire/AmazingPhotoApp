@@ -54,7 +54,6 @@ class LoginRegister extends React.Component {
                 this.loginUser(obj.data.user.login_name, this.state.password);
             })
             .catch((err) => {
-
                 this.setState({ invalidInput: true, errorMessage: err.response.data.message });
                 console.log(err);
             });

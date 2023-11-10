@@ -399,6 +399,8 @@ app.post("/admin/logout", (request, response) => {
         response.status(400);
     }
 });
+
+
 app.post("/admin/register", (request, response) => {
     const { first_name, last_name, location, description, occupation, login_name, password } = request.body;
     // Check if any of the required fields are empty
@@ -454,6 +456,49 @@ app.post("/admin/register", (request, response) => {
             });
         }
     });
+});
+
+/**
+ * URL /commentsOfUser/:id - Returns the Comments for User (id).
+ */
+app.get("/commentsOfUser/:id", function (request, response) {
+    if (request.session.login_name) {
+        const id = request.params.id;
+        Photo.aggregate([
+            {
+                $unwind: "$comments",
+            },
+            {
+                $project: {
+                    _id: "$comments._id",
+                    user_id: "$comments.user_id",
+                    photo_name: "$file_name",
+                    date_time: "$comments.date_time",
+                    text: "$comments.comment",
+                },
+            },
+            {
+                $match: {
+                    user_id: new mongoose.Types.ObjectId(id)
+                },
+            }
+        ], function (err, comments) {
+            if (err) {
+                console.error("Error in /commentsOfUser/:id", err);
+                response.status(500)
+                    .send(JSON.stringify(err));
+                return;
+            }
+            if (comments.length === 0) {
+                response.status(400)
+                    .send();
+                return;
+            }
+            response.end(JSON.stringify(comments));
+        });
+    } else {
+        response.status(401).send();
+    }
 });
 
 
