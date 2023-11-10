@@ -1,6 +1,9 @@
 # AmazingPhotoApp - Sapphire
 
-**NOTE TO PROF/TA:** Include userComments.jsx and userComments.css!
+### Files to include:
+
+- userComments/ (extra credit proj 6)
+- password.js (extra credit proj 7)
 
 ## Project Roles
 
