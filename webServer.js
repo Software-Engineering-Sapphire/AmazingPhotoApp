@@ -413,7 +413,7 @@ app.post("/admin/logout", (request, response) => {
 });
 
 
-app.post("/admin/register", (request, response) => {
+app.post("/user", (request, response) => {
     const { first_name, last_name, location, description, occupation, login_name, password } = request.body;
     // Check if any of the required fields are empty
     if (!login_name) {
@@ -436,7 +436,7 @@ app.post("/admin/register", (request, response) => {
     // Check if the username already exists
     User.findOne({ login_name }, (err, existingUser) => {
         if (err) {
-            console.error("Error in /admin/register", err);
+            console.error("Error in /user", err);
             response.status(500).json({ message: "Registration failed" });
             return;
         }
@@ -457,14 +457,14 @@ app.post("/admin/register", (request, response) => {
 
             newUser.save((err, user) => {
                 if (err) {
-                    console.error("Error in /admin/register", err);
+                    console.error("Error in /user", err);
                     response.status(500).json({ message: "Registration failed" });
                     return;
                 }
 
                 request.session.login_name = login_name;
 
-                response.status(200).json({ message: "Registration successful", user });
+                response.status(200).json({ message: "Registration successful", user, login_name });
             });
         }
     });

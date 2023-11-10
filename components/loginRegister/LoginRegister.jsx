@@ -44,7 +44,7 @@ class LoginRegister extends React.Component {
         }
 
         axios
-            .post('/admin/register', JSON.stringify({ login_name: userName, password: makePasswordEntry(password), first_name: firstName, last_name: lastName, location: location, occupation: occupation, description: description}), {
+            .post('/user', JSON.stringify({ login_name: userName, password: makePasswordEntry(password), first_name: firstName, last_name: lastName, location: location, occupation: occupation, description: description}), {
                 headers: {
                     'Content-Type': 'application/json',
                 },
