@@ -295,6 +295,8 @@ app.get("/photosOfUser/:id", function (request, response) {
                     __v: 0,
                     "comments.__v": 0,
                     "comments.user_id": 0,
+                    "comments.user.login_name": 0,
+                    "comments.user.password": 0,
                     "comments.user.location": 0,
                     "comments.user.description": 0,
                     "comments.user.occupation": 0,
@@ -469,7 +471,6 @@ app.post("/admin/register", (request, response) => {
 });
 
 app.post('/commentsOfPhoto/:photo_id', function (request, response) {
-    console.log(request.params.photo_id)
     if (request.session.login_name) {
         const timestamp = new Date().valueOf();
         const id = new mongoose.Types.ObjectId(request.params.photo_id);
@@ -478,14 +479,12 @@ app.post('/commentsOfPhoto/:photo_id', function (request, response) {
             comment: commentInput,
             date_time: timestamp,
             user_id: request.session.user_id
-
         }
         Photo.findById({
             _id: id
         }).then(
-            photo => {
+            ( photo) => {
                 photo.comments = photo.comments.concat(commentBody)
-
                 photo.save((err, comment)=> {
                     if (err){
                         console.error('/commentsOfPhoto/:photoId', err);
@@ -518,7 +517,7 @@ app.post("/photos/new", (request, response) => {
         //                  'image/png')
         //   buffer       - A node Buffer containing the contents of the file
         //   size         - The size of the file in bytes
-        console.log(request.file.fieldname);
+
         // We need to create the file in the directory "images" under a unique name.
         // We make the original file name unique by adding a unique prefix with a
         // timestamp.
