@@ -1,5 +1,3 @@
-"use strict";
-
 const mongoose = require("mongoose");
 
 /**
@@ -12,7 +10,7 @@ const userSchema = new mongoose.Schema({
   description: String,
   occupation: String,
   login_name: String,
-  password: String,
+  password: Object
 });
 
 /**

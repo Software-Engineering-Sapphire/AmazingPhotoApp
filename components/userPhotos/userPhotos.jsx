@@ -80,6 +80,12 @@ class UserPhotos extends React.Component {
                     </div>
                 </div>
             );
+        } else {
+            return (
+                <Typography>
+                    Advanced features enabled!
+                </Typography>
+            );
         }
     }
 }

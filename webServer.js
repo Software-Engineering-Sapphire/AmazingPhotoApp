@@ -49,6 +49,9 @@ const User = require("./schema/user.js");
 const Photo = require("./schema/photo.js");
 const SchemaInfo = require("./schema/schemaInfo.js");
 
+// Import password hashing functions
+const passwordFxns = require('./password');
+
 mongoose.set("strictQuery", false);
 mongoose.connect("mongodb://127.0.0.1/project6", {
     useNewUrlParser: true,
@@ -192,7 +195,14 @@ app.get("/user/list", function (request, response) {
 app.get("/user/:id", function (request, response) {
     if (request.session.login_name) {
         const id = request.params.id;
-        User.find({_id: {$eq: id}}, {__v: 0}, function (err, user) {
+        let mongoTargetObj;
+        try {
+            mongoTargetObj = new mongoose.Types.ObjectId(id);
+        } catch (e) {
+            response.status(400).send();
+        }
+
+        User.find({_id: {$eq: mongoTargetObj}}, {__v: 0}, function (err, user) {
             if (err) {
                 console.error("Error in /user/:id", err);
                 response.status(500)
@@ -217,10 +227,17 @@ app.get("/user/:id", function (request, response) {
 app.get("/photosOfUser/:id", function (request, response) {
     if (request.session.login_name) {
         const id = request.params.id;
+        let mongoTargetObj;
+        try {
+            mongoTargetObj = new mongoose.Types.ObjectId(id);
+        } catch (e) {
+            response.status(400).send();
+        }
+
         Photo.aggregate([
             {
                 $match:
-                    {user_id: {$eq: new mongoose.Types.ObjectId(id)}}
+                    {user_id: {$eq: mongoTargetObj}}
             },
             {
                 $addFields: {
@@ -299,6 +316,154 @@ app.get("/photosOfUser/:id", function (request, response) {
 app.get("/commentsOfUser/:id", function (request, response) {
     if (request.session.login_name) {
         const id = request.params.id;
+        let mongoTargetObj;
+        try {
+            mongoTargetObj = new mongoose.Types.ObjectId(id);
+        } catch (e) {
+            response.status(400).send();
+        }
+
+        Photo.aggregate([
+            {
+                $unwind: "$comments",
+            },
+            {
+                $project: {
+                    _id: "$comments._id",
+                    user_id: "$comments.user_id",
+                    photo_name: "$file_name",
+                    date_time: "$comments.date_time",
+                    text: "$comments.comment",
+                },
+            },
+            {
+                $match: {
+                    user_id: mongoTargetObj
+                },
+            }
+        ], function (err, comments) {
+            if (err) {
+                console.error("Error in /commentsOfUser/:id", err);
+                response.status(500)
+                    .send(JSON.stringify(err));
+                return;
+            }
+            if (comments.length === 0) {
+                response.status(400)
+                    .send();
+                return;
+            }
+            response.end(JSON.stringify(comments));
+        });
+    } else {
+        response.status(401).send();
+    }
+});
+
+/**
+ * URL /admin/login - Creates User Session and Returns Username
+ */
+app.post("/admin/login", (request, response) => {
+    const {login_name,password} = request.body;
+    User.aggregate([
+        {
+            $match: {
+                login_name: login_name
+            }
+        },
+        // {
+        //     $match: {
+        //         password: password
+        //     }
+        // }
+    ], function (err, users) {
+        const user = users[0];
+        if (user && passwordFxns.doesPasswordMatch(user.password.hash, user.password.salt, password)) {
+            request.session.login_name = login_name;
+
+            response.status(200).json({message: "Successful Login", user: user});
+        } else {
+            response.status(400).json({message: "Invalid Login Information"});
+        }
+    });
+});
+
+
+/**
+ * User /admin/logout - Clears Current Session
+ */
+app.post("/admin/logout", (request, response) => {
+    if (request.req.session.loggedInUser) {
+        request.req.session.destroy();
+    } else {
+        response.status(400);
+    }
+});
+
+
+app.post("/admin/register", (request, response) => {
+    const { first_name, last_name, location, description, occupation, login_name, password } = request.body;
+    // Check if any of the required fields are empty
+    if (!login_name) {
+        response.status(400).json({ message: "Please enter username" });
+        return;
+    }
+    if (!password || password === 'invalid password') {
+        response.status(400).json({ message: "Please enter password" });
+        return;
+    }
+    if (!first_name) {
+        response.status(400).json({ message: "Please enter first name" });
+        return;
+    }
+    if (!last_name) {
+        response.status(400).json({message: "Please enter last name"});
+        return;
+    }
+
+    // Check if the username already exists
+    User.findOne({ login_name }, (err, existingUser) => {
+        if (err) {
+            console.error("Error in /admin/register", err);
+            response.status(500).json({ message: "Registration failed" });
+            return;
+        }
+
+        if (existingUser) {
+            response.status(400).json({ message: "Username already exists" });
+        } else {
+            // Create a new user
+            const newUser = new User({
+                first_name,
+                last_name,
+                location,
+                description,
+                occupation,
+                login_name,
+                password
+            });
+
+            newUser.save((err, user) => {
+                if (err) {
+                    console.error("Error in /admin/register", err);
+                    response.status(500).json({ message: "Registration failed" });
+                    return;
+                }
+
+                request.session.login_name = login_name;
+
+                response.status(200).json({ message: "Registration successful", user });
+            });
+        }
+    });
+});
+
+/**
+ * URL /commentsOfUser/:id - Returns the Comments for User (id).
+ */
+app.get("/commentsOfUser/:id", function (request, response) {
+    if (request.session.login_name) {
+        const id = request.params.id;
         Photo.aggregate([
             {
                 $unwind: "$comments",
@@ -336,40 +501,6 @@ app.get("/commentsOfUser/:id", function (request, response) {
     }
 });
 
-/**
- * URL /admin/login - Creates User Session and Returns Username
- */
-app.post("/admin/login", (request, response) => {
-    const login_name = request.body.login_name;
-
-    User.aggregate([
-        {
-            $match: {
-                login_name: login_name
-            }
-        }
-    ], function (err, users) {
-        const user = users[0];
-        if (user) {
-            request.session.login_name = login_name;
-
-            response.status(200).json({message: "Successful Login", user: user});
-        } else {
-            response.status(400).json({message: "Invalid Login Information"});
-        }
-    });
-});
-
-/**
- * User /admin/logout - Clears Current Session
- */
-app.post("/admin/logout", (request, response) => {
-    if (request.req.session.loggedInUser) {
-        request.req.session.destroy();
-    } else {
-        response.status(400);
-    }
-});
 
 const server = app.listen(3000, function () {
     const port = server.address().port;

@@ -35,6 +35,10 @@ module.exports = {
   },
   resolve: {
     extensions: ['*', '.js', '.jsx'],
+      fallback: {
+        "crypto-browserify": require.resolve('crypto-browserify'),
+        "stream": require.resolve('stream-browserify'),
+      }
   },
   output: {
     path: `${__dirname}/compiled`,
