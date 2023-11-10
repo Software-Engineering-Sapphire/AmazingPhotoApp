@@ -35,7 +35,7 @@ class UserPhotos extends React.Component {
     // Handle comment submission
     handleCommentSubmit = (photoId, newComment) => {
         axios
-            .post('/commentsOfPhoto/' + photoId, { comment: newComment })
+            .post('/commentsOfPhoto/' + photoId, {comment: newComment})
             .then((response) => {
                 this.fetchDataFromAPI();
             })
@@ -45,7 +45,7 @@ class UserPhotos extends React.Component {
     };
 
     render() {
-        const { photos } = this.state;
+        const {photos} = this.state;
         if (photos === null) {
             return <Typography>Loading...</Typography>;
         } else {
@@ -94,14 +94,7 @@ class UserPhotos extends React.Component {
                     </div>
                 </div>
             );
-        } else {
-            return (
-                <Typography>
-                    Advanced features enabled!
-                </Typography>
-            );
         }
     }
-}
 
-export default UserPhotos;
+export default userPhotos;
