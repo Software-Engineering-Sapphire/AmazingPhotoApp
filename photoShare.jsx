@@ -44,6 +44,10 @@ class PhotoShare extends React.Component {
         }
     };
 
+    toggleAdvancedFeatures = (advancedFeaturesBool) => {
+        this.setState({advancedFeatures: advancedFeaturesBool});
+    }
+
     render() {
         const userIsLoggedIn = this.state.userIsLoggedIn;
         return (
