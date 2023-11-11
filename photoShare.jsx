@@ -17,6 +17,7 @@ import UserList from './components/userList/userList';
 import UserPhotos from './components/userPhotos/userPhotos';
 import UserComments from './components/userComments/userComments';
 import LoginRegister from "./components/loginRegister/LoginRegister";
+import axios from "axios";
 
 class PhotoShare extends React.Component {
     constructor(props) {
@@ -36,8 +37,16 @@ class PhotoShare extends React.Component {
 
     updateLoggedInUser = (user = null) => {
         if (user == null) {
-            this.setState({userIsLoggedIn: false});
-            this.setState({topBarStatus: "Please Login"});
+            axios.post("/admin/logout").then(
+                (obj) => {
+                    console.log("this");
+                    this.setState({userIsLoggedIn: false});
+                    this.setState({topBarStatus: "Please Login"});
+            }).catch(
+                (err) => {
+                    console.log(err);
+                }
+            );
         } else {
             this.setState({userIsLoggedIn: true});
             this.setState({topBarStatus: "Hi, " + user.first_name});

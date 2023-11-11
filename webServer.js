@@ -405,10 +405,11 @@ app.post("/admin/login", (request, response) => {
  * User /admin/logout - Clears Current Session
  */
 app.post("/admin/logout", (request, response) => {
-    if (request.session.loggedInUser) {
-        request.req.session.destroy();
+    if (request.session.login_name) {
+        request.session.destroy();
+        response.status(200).json({message: "Logout Successful"});
     } else {
-        response.status(400);
+        response.status(400).json({message: "No User Logged In"});
     }
 });
 
