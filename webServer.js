@@ -393,7 +393,8 @@ app.post("/admin/login", (request, response) => {
         if (user && passwordFxns.doesPasswordMatch(user.password.hash, user.password.salt, password)) {
             request.session.login_name = login_name;
             request.session.user_id = user._id;
-            response.status(200).json({message: "Successful Login", user: user});
+            console.log(request.data);
+            response.status(200).json({message: "Successful Login", user: user, _id: user._id});
         } else {
             response.status(400).json({message: "Invalid Login Information"});
         }
