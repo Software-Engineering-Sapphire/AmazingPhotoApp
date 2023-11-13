@@ -10,6 +10,7 @@ import './styles/main.css';
 
 import {Redirect} from "react-router";
 
+import axios from "axios";
 // import necessary components
 import TopBar from './components/topBar/TopBar';
 import UserDetail from './components/userDetail/userDetail';
@@ -17,7 +18,6 @@ import UserList from './components/userList/userList';
 import UserPhotos from './components/userPhotos/userPhotos';
 import UserComments from './components/userComments/userComments';
 import LoginRegister from "./components/loginRegister/LoginRegister";
-import axios from "axios";
 
 class PhotoShare extends React.Component {
     constructor(props) {
@@ -38,8 +38,7 @@ class PhotoShare extends React.Component {
     updateLoggedInUser = (user = null) => {
         if (user == null) {
             axios.post("/admin/logout").then(
-                (obj) => {
-                    console.log("this");
+                () => {
                     this.setState({userIsLoggedIn: false});
                     this.setState({topBarStatus: "Please Login"});
             }).catch(
