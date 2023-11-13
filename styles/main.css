@@ -10,6 +10,9 @@ main- here.
 }
 
 .main-grid-item {
-  min-height: calc(100vh - 85px);
   padding: 10px;
+}
+
+.main-grid-item:empty {
+  display: none;
 }

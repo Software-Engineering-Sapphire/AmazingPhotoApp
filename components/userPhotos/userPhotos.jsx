@@ -1,5 +1,5 @@
 import React from 'react';
-import {Typography} from '@mui/material';
+import {Button, Typography} from '@mui/material';
 import './userPhotos.css';
 import {Link} from "react-router-dom";
 import axios from 'axios';
@@ -51,7 +51,11 @@ class UserPhotos extends React.Component {
         } else {
             return (
                 <div>
-                    {/* ... Other components ... */}
+                    <div key="userDetailsBtn">
+                        <Button variant="contained" href={`#/users/${this.props.match.params.userId}`}>
+                            User Details
+                        </Button>
+                    </div>
                     <div>
                         {photos.map((photo, index) => {
                             return (
