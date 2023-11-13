@@ -223,7 +223,7 @@ app.get("/user/:id", function (request, response) {
                 location: user[0].location,
                 description: user[0].description,
                 occupation: user[0].occupation
-            }
+            };
             response.end(JSON.stringify(userDTO));
         });
     } else {
@@ -376,7 +376,7 @@ app.get("/commentsOfUser/:id", function (request, response) {
  * URL /admin/login - Creates User Session and Returns Username
  */
 app.post("/admin/login", (request, response) => {
-    const {login_name,password} = request.body;
+    const {login_name, password} = request.body;
     User.aggregate([
         {
             $match: {
@@ -416,18 +416,18 @@ app.post("/admin/logout", (request, response) => {
 
 
 app.post("/user", (request, response) => {
-    const { first_name, last_name, location, description, occupation, login_name, password } = request.body;
+    const {first_name, last_name, location, description, occupation, login_name, password} = request.body;
     // Check if any of the required fields are empty
     if (!login_name) {
-        response.status(400).json({ message: "Please enter username" });
+        response.status(400).json({message: "Please enter username"});
         return;
     }
     if (!password || password === 'invalid password') {
-        response.status(400).json({ message: "Please enter password" });
+        response.status(400).json({message: "Please enter password"});
         return;
     }
     if (!first_name) {
-        response.status(400).json({ message: "Please enter first name" });
+        response.status(400).json({message: "Please enter first name"});
         return;
     }
     if (!last_name) {
@@ -436,15 +436,15 @@ app.post("/user", (request, response) => {
     }
 
     // Check if the username already exists
-    User.findOne({ login_name }, (err, existingUser) => {
+    User.findOne({login_name}, (err, existingUser) => {
         if (err) {
             console.error("Error in /user", err);
-            response.status(500).json({ message: "Registration failed" });
+            response.status(500).json({message: "Registration failed"});
             return;
         }
 
         if (existingUser) {
-            response.status(400).json({ message: "Username already exists" });
+            response.status(400).json({message: "Username already exists"});
         } else {
             // Create a new user
             const newUser = new User({
@@ -457,96 +457,95 @@ app.post("/user", (request, response) => {
                 password
             });
 
-            newUser.save((err, user) => {
-                if (err) {
-                    console.error("Error in /user", err);
-                    response.status(500).json({ message: "Registration failed" });
+            newUser.save((errUser, user) => {
+                if (errUser) {
+                    console.error("Error in /user", errUser);
+                    response.status(500).json({message: "Registration failed"});
                     return;
                 }
 
                 request.session.login_name = login_name;
 
-                response.status(200).json({ message: "Registration successful", user, login_name });
+                response.status(200).json({message: "Registration successful", user, login_name});
             });
         }
     });
 });
 
 app.post('/commentsOfPhoto/:photo_id', function (request, response) {
-    if (request.session.login_name) {
-        const timestamp = new Date().valueOf();
-        const id = new mongoose.Types.ObjectId(request.params.photo_id);
-        const commentInput = request.body.comment;
-        const commentBody = {
-            comment: commentInput,
-            date_time: timestamp,
-            user_id: request.session.user_id
+        if (request.session.login_name) {
+            const timestamp = new Date().valueOf();
+            const id = new mongoose.Types.ObjectId(request.params.photo_id);
+            const commentInput = request.body.comment;
+            const commentBody = {
+                comment: commentInput,
+                date_time: timestamp,
+                user_id: request.session.user_id
+            };
+            Photo.findById({
+                _id: id
+            }).then(
+                (photo) => {
+                    photo.comments = photo.comments.concat(commentBody);
+                    photo.save((err) => {
+                        if (err) {
+                            console.error('/commentsOfPhoto/:photoId', err);
+                            response.status(400).json({message: "Comment Upload Failed"});
+                            return;
+                        }
+                        response.status(200).json({message: "Comment Upload Success"});
+                    });
+                }
+            );
         }
-        Photo.findById({
-            _id: id
-        }).then(
-            ( photo) => {
-                photo.comments = photo.comments.concat(commentBody)
-                photo.save((err, comment)=> {
-                    if (err){
-                        console.error('/commentsOfPhoto/:photoId', err);
-                        response.status(400).json({message: "Comment Upload Failed"});
-                        return;
-                    }
-                    response.status(200).json({message: "Comment Upload Success"});
-                })
-            }
-        )
     }
-}
-)
+);
 
 
 app.post("/photos/new", (request, response) => {
-    if (request.session.login_name){
+    if (request.session.login_name) {
 
         processFormBody(request, response, function (err) {
-        if (err || !request.file) {
-            response.status (400)
-                .send(JSON.stringify(err));
-            return;
-        }
+            if (err || !request.file) {
+                response.status(400)
+                    .send(JSON.stringify(err));
+                return;
+            }
 
-        // request.file has the following properties of interest:
-        //   fieldname    - Should be 'uploadedphoto' since that is what we sent
-        //   originalname - The name of the file the user uploaded
-        //   mimetype     - The mimetype of the image (e.g., 'image/jpeg',
-        //                  'image/png')
-        //   buffer       - A node Buffer containing the contents of the file
-        //   size         - The size of the file in bytes
+            // request.file has the following properties of interest:
+            //   fieldname    - Should be 'uploadedphoto' since that is what we sent
+            //   originalname - The name of the file the user uploaded
+            //   mimetype     - The mimetype of the image (e.g., 'image/jpeg',
+            //                  'image/png')
+            //   buffer       - A node Buffer containing the contents of the file
+            //   size         - The size of the file in bytes
 
-        // We need to create the file in the directory "images" under a unique name.
-        // We make the original file name unique by adding a unique prefix with a
-        // timestamp.
-        const timestamp = new Date().valueOf();
-        const filename = 'U' +  String(timestamp) + request.file.originalname;
+            const timestamp = new Date().valueOf();
+            const filename = 'U' + String(timestamp) + request.file.originalname;
 
-        fs.writeFile("./images/" + filename, request.file.buffer, function (err) {
-            // XXX - Once you have the file written into your images directory under the
-            // name filename you can create the Photo object in the database
-        const newPhoto = new Photo({
-            file_name: filename,
-            date_time: timestamp,
-            user_id: request.session.user_id
-
-        })
-            newPhoto.save((err, photo)=> {
-                if (err){
-                    console.error("Error in /photos/new", err);
-                    response.status(400).json({message: "Photo Upload Failed"});
+            fs.writeFile("./images/" + filename, request.file.buffer, function (errWrite) {
+                if (errWrite) {
+                    console.log("Error Writing to file in /photos/new", errWrite);
                     return;
                 }
-                response.status(200).json({message: "Photo Upload Success"})
-                }
+                const newPhoto = new Photo({
+                    file_name: filename,
+                    date_time: timestamp,
+                    user_id: request.session.user_id
 
-            )
+                });
+                newPhoto.save((errPhoto) => {
+                        if (errPhoto) {
+                            console.error("Error in /photos/new", errPhoto);
+                            response.status(400).json({message: "Photo Upload Failed"});
+                            return;
+                        }
+                        response.status(200).json({message: "Photo Upload Success"});
+                    }
+                );
+            });
         });
-    });}
+    }
 });
 
 const server = app.listen(3000, function () {
